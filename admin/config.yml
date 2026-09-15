@@ -1,10 +1,7 @@
 # Instellingen voor Sveltia CMS.
-# LET OP: vul hieronder bij "repo" je eigen GitHub-gebruikersnaam in
-# zodra de repo op GitHub staat, anders kan het CMS niet inloggen.
-
 backend:
   name: github
-  repo: GEBRUIKERSNAAM/site-hilde-windels
+  repo: AyTo5500/site-hilde-windels
   branch: main
 
 media_folder: assets/works
