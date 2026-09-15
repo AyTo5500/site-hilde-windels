@@ -1,0 +1,529 @@
+/* =========================================================
+   Hilde Windels, portfolio
+   Doorheen de jaren. Cream, fijne grotesk, horizontale tijdsbalk.
+   ========================================================= */
+
+:root {
+  --bg:        #f4f2ed;
+  --ink:       #24221d;
+  --ink-soft:  #6b6558;   /* 5,17:1 op --bg, haalt WCAG AA */
+  --line:      #e4e0d6;
+
+  --sans: "Helvetica Neue", "Inter Tight", Helvetica, Arial, sans-serif;
+
+  --pad: clamp(1.5rem, 5vw, 4.5rem);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --bar-h: clamp(4rem, 8svh, 5.5rem);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--ink); color: var(--bg); }
+
+/* Zichtbaar voor wie met het toetsenbord navigeert, in de stijl van de site */
+:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+
+/* Klein zetsel: gewone tekst, geen kapitalen, normale spatiering */
+.bar__role,
+.bar__nav,
+.data dt,
+.data dd {
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   Kopbalk
+   ========================================================= */
+/* Kopbalk iets groter dan het overige klein zetsel */
+.bar__role,
+.bar__nav { font-size: 0.95rem; }
+
+.bar {
+  height: var(--bar-h);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 var(--pad);
+}
+.bar__home {
+  font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.bar__role { color: var(--ink-soft); }
+
+.bar__nav { display: flex; gap: clamp(1.1rem, 3vw, 2.75rem); }
+.bar__nav a {
+  position: relative;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  padding-bottom: 3px;
+  transition: color .3s var(--ease);
+}
+.bar__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%; bottom: 0;
+  height: 1px;
+  background: var(--ink);
+  transition: right .4s var(--ease);
+}
+.bar__nav a:hover { color: var(--ink); }
+.bar__nav a:hover::after { right: 0; }
+.bar__nav a.is-current { color: var(--ink); }
+.bar__nav a.is-current::after { right: 0; background: var(--line); }
+
+/* =========================================================
+   Groot woord: naam of paginatitel
+   ========================================================= */
+.display {
+  font-weight: 200;
+  font-size: clamp(2.6rem, 6.2vw, 6.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.display__sub {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+/* =========================================================
+   Startpagina: tijdsbalk
+   ========================================================= */
+.page--timeline { overflow: hidden; }
+
+.stage {
+  height: calc(100svh - var(--bar-h));
+  display: grid;
+  grid-template-columns: minmax(320px, 40%) 1fr;
+  align-items: end;
+  padding-bottom: clamp(1.5rem, 4svh, 3rem);
+}
+
+/* Alles in deze kolom een maat groter dan het zetsel elders */
+.stage__side .display { font-size: clamp(3rem, 7.4vw, 7.6rem); }
+.stage__side .display__sub { font-size: 1.05rem; margin-top: 1.1rem; }
+.stage__side .focus { font-size: 0.95rem; line-height: 1.55; }
+
+.stage__side {
+  /* zelfde linkermarge als de kopbalk, zodat alles op een lijn staat */
+  padding: 0 clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 5svh, 4rem) var(--pad);
+}
+
+/* Details van het werk waar je staat; verandert bij hover en bij scrollen */
+.focus {
+  /* Alle beschrijvingen liggen in dezelfde rastercel: de zichtbare tekst en,
+     onzichtbaar, alle andere. Daardoor is dit vak altijd zo hoog als de
+     langste beschrijving en verschuift de balk eronder nooit. */
+  display: grid;
+  margin: clamp(1rem, 2.5svh, 1.75rem) 0 0;
+  max-width: 44ch;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  min-height: 4.5rem;
+}
+.focus > span { grid-area: 1 / 1; }
+.focus__live { transition: opacity .3s var(--ease); }
+.focus__live.is-fading { opacity: 0; }
+.focus__sizer { visibility: hidden; pointer-events: none; }
+
+.timeline {
+  --tl-h: clamp(180px, 42svh, 460px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 1px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.timeline::-webkit-scrollbar { height: 3px; }
+.timeline::-webkit-scrollbar-track { background: transparent; }
+.timeline::-webkit-scrollbar-thumb { background: var(--line); }
+
+.tl__list {
+  list-style: none;
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(1.25rem, 2.2vw, 2.15rem);
+  padding: 0 var(--pad) 0 0;
+  width: max-content;
+  border-bottom: 1px solid var(--line);   /* de tijdas */
+}
+.tl__item {
+  display: flex;
+  flex-direction: column;
+  /* exact even breed als de foto, zodat de titel nooit buiten het beeld steekt */
+  width: calc(var(--ar, 1) * var(--tl-h));
+}
+.tl__frame {
+  /* maat staat vast in CSS, dus een nog niet geladen beeld verschuift niets */
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  height: var(--tl-h);
+  width: calc(var(--ar, 1) * var(--tl-h));
+  overflow: hidden;
+}
+.tl__frame img {
+  height: 100%;
+  width: 100%;
+  max-width: none;
+  object-fit: cover;
+  transition: opacity .4s var(--ease);
+}
+.tl__item:hover .tl__frame img { opacity: 0.82; }
+
+.tl__cap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  height: 6.6rem;                        /* vast, ook bij een titel over drie regels */
+  padding-top: 1rem;
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--line);     /* streepje op de tijdas */
+}
+.tl__title {
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tl__year {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.tl__regel {
+  display: flex;
+  gap: 0.55rem;
+  align-items: baseline;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tl__meer {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.tl__meer::before { content: "\00b7"; margin-right: 0.55rem; }
+
+.tl__item.is-active .tl__cap { border-left-color: var(--ink); }
+.tl__item.is-active .tl__year { color: var(--ink); }
+
+/* =========================================================
+   Hamburgermenu, voor telefoons en lage (liggende) schermen
+   ========================================================= */
+.burger {
+  display: none;                          /* alleen onder de breekpunten hieronder */
+  position: relative;
+  z-index: 60;
+  width: 1.9rem;
+  height: 1.15rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.burger span {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--ink);
+  transition: transform .35s var(--ease);
+}
+.burger span:nth-child(1) { top: 3px; }
+.burger span:nth-child(2) { bottom: 3px; }
+
+@media (max-width: 700px), (max-height: 520px) {
+  .burger { display: block; }
+
+  /* Balk blijft bereikbaar: hij wijkt bij naar beneden scrollen en komt
+     terug zodra je een klein stukje omhoog gaat. */
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 56;
+    background: var(--bg);
+    transition: transform .35s var(--ease);
+  }
+  .is-bar-hidden .bar { transform: translateY(-100%); }
+  /* Een transform maakt de balk het referentievlak voor het vaste paneel,
+     dus nooit verschuiven terwijl het menu openstaat. */
+  .is-menu-open .bar { transform: none; }
+
+  .bar__nav {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(1.25rem, 4svh, 2.25rem);
+    padding: 0 var(--pad);
+    background: var(--bg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .35s var(--ease), visibility .35s;
+  }
+  .bar__nav a {
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    padding: 0;
+  }
+  .bar__nav a::after { display: none; }
+  .bar__nav a.is-current { color: var(--ink-soft); }
+
+  .is-menu-open { overflow: hidden; }
+  .is-menu-open .bar__nav { opacity: 1; visibility: visible; }
+  .is-menu-open .burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .is-menu-open .burger span:nth-child(2) { transform: translateY(-6px) rotate(-45deg); }
+}
+
+/* Op telefoons alleen het menu in de balk. De naam linksboven deed hetzelfde
+   als "Werk", en daar is te weinig ruimte om dat verschil te dragen. */
+@media (max-width: 640px) {
+  .bar__role,
+  .bar__home { display: none; }
+  .bar { justify-content: flex-end; }
+}
+
+@media (max-width: 1000px) {
+  .page--timeline { overflow: auto; }
+  .stage {
+    height: auto;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: clamp(1rem, 2.5svh, 1.75rem);
+    padding-bottom: clamp(2.5rem, 7svh, 4rem);
+  }
+  .stage__side { padding: 0 var(--pad); }
+  .focus { margin-top: 1.5rem; min-height: 0; max-width: none; }
+  .tl__list { padding-left: var(--pad); }
+  .timeline { --tl-h: clamp(180px, 40svh, 480px); }
+}
+
+/* Lage vensters: gestapeld en scrollbaar, anders valt de balk buiten beeld */
+@media (min-width: 1001px) and (max-height: 620px) {
+  .page--timeline { overflow: auto; }
+  .stage { height: auto; padding-bottom: 2rem; }
+  .stage__side .display { font-size: clamp(2.4rem, 4.5vw, 3.5rem); }
+  .timeline { --tl-h: 240px; }
+}
+
+/* =========================================================
+   Binnenpagina's
+   ========================================================= */
+.sheet {
+  padding: clamp(3rem, 10svh, 7rem) var(--pad) clamp(4rem, 12svh, 8rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.display--page { margin-bottom: clamp(3rem, 9svh, 6rem); }
+
+.sheet__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 7vw, 7rem);
+  align-items: start;
+}
+@media (max-width: 1000px) {
+  .sheet__grid { grid-template-columns: 1fr; }
+}
+
+/* Liggende telefoons: minder hoogte kwijt aan de naam */
+@media (max-height: 480px) {
+  .stage__side .display { font-size: clamp(1.9rem, 5vw, 2.6rem); }
+  .stage__side .display__sub { font-size: 0.95rem; margin-top: 0.6rem; }
+  .stage { gap: 1.5rem; }
+}
+
+.sheet__text p {
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  font-weight: 300;
+  line-height: 1.55;
+  max-width: 34ch;
+  margin-bottom: 1.4rem;
+  color: var(--ink-soft);
+}
+.sheet__text .lead { color: var(--ink); }
+
+.data { display: flex; flex-direction: column; margin-bottom: 3.5rem; }
+.data > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--line);
+}
+.data > div:last-child { border-bottom: 1px solid var(--line); }
+.data dt { color: var(--ink-soft); }
+.data dd { color: var(--ink); text-align: right; overflow-wrap: anywhere; }
+.link { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: border-color .3s var(--ease); }
+.link:hover { border-color: var(--ink); }
+
+.cv__head {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 3rem 0 0.7rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--line);
+}
+.cv__list { list-style: none; }
+.cv__list li {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 0.7rem;
+}
+.cv__list li span {
+  color: var(--ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.cv__list--plain li { grid-template-columns: 1fr; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Smalle telefoons: jaartal boven de regel in plaats van ernaast */
+@media (max-width: 480px) {
+  .cv__list li { grid-template-columns: 1fr; gap: 0.15rem; }
+  .data > div { flex-direction: column; gap: 0.15rem; }
+  .data dd { text-align: left; }
+}
+
+
+/* =========================================================
+   Kijker: de foto's van een werk op ware grootte
+   ========================================================= */
+.kijker {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 2rem);
+  padding: clamp(3.5rem, 8svh, 5rem) clamp(0.75rem, 3vw, 2.5rem) clamp(1.5rem, 4svh, 3rem);
+  background: var(--bg);
+}
+.kijker[hidden] { display: none; }
+
+.kijker__fig {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 2svh, 1.25rem);
+}
+.kijker__fig img {
+  max-width: 100%;
+  max-height: 72svh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.kijker__cap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem 1.25rem;
+  text-align: center;
+  max-width: 70ch;
+}
+.kijker__titel { font-size: 1.05rem; color: var(--ink); }
+.kijker__detail,
+.kijker__teller { font-size: 0.85rem; color: var(--ink-soft); }
+
+/* Knoppen: haarlijnen, in dezelfde taal als de rest */
+.kijker__sluit,
+.kijker__pijl {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.kijker__sluit {
+  position: absolute;
+  top: clamp(1rem, 3svh, 1.75rem);
+  right: clamp(0.75rem, 3vw, 2.5rem);
+  width: 1.9rem;
+  height: 1.9rem;
+}
+.kijker__sluit::before,
+.kijker__sluit::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: var(--ink);
+}
+.kijker__sluit::before { transform: rotate(45deg); }
+.kijker__sluit::after  { transform: rotate(-45deg); }
+
+.kijker__pijl { width: 2.75rem; height: 2.75rem; }
+.kijker__pijl::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0.7rem; height: 0.7rem;
+  border-left: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  transition: transform .3s var(--ease);
+}
+.kijker__pijl--vorige::before   { transform: translate(-30%, -50%) rotate(45deg); }
+.kijker__pijl--volgende::before { transform: translate(-70%, -50%) rotate(-135deg); }
+.kijker__pijl--vorige:hover::before   { transform: translate(-55%, -50%) rotate(45deg); }
+.kijker__pijl--volgende:hover::before { transform: translate(-45%, -50%) rotate(-135deg); }
+.kijker__pijl[disabled] { opacity: 0.25; cursor: default; }
+.kijker__pijl[disabled]:hover::before { transform: translate(-30%, -50%) rotate(45deg); }
+.kijker__pijl--volgende[disabled]:hover::before { transform: translate(-70%, -50%) rotate(-135deg); }
+
+/* Geen scroll achter de kijker */
+.is-kijker-open { overflow: hidden; }
+
+@media (max-width: 640px) {
+  .kijker { grid-template-columns: 1fr; }
+  .kijker__pijl { display: none; }        /* op een touchscreen veeg je */
+  .kijker__fig img { max-height: 62svh; }
+}

@@ -1,0 +1,55 @@
+# Instellingen voor Sveltia CMS.
+# LET OP: vul hieronder bij "repo" je eigen GitHub-gebruikersnaam in
+# zodra de repo op GitHub staat, anders kan het CMS niet inloggen.
+
+backend:
+  name: github
+  repo: GEBRUIKERSNAAM/site-hilde-windels
+  branch: main
+
+media_folder: assets/works
+public_folder: assets/works
+
+locale: nl
+
+collections:
+  - name: werken
+    label: Werken
+    label_singular: Werk
+    folder: werken
+    extension: json
+    create: true
+    delete: true
+    slug: '{{fields.fotos.0 | default("werk")}}'
+    identifier_field: titel
+    summary: '{{titel}} ({{jaar}})'
+    sortable_fields: [jaar, titel]
+    view_filters: []
+    fields:
+      - { name: titel, label: Titel, widget: string }
+      - { name: jaar, label: Jaartal, widget: number, value_type: int, min: 1980, max: 2100 }
+      - name: techniek
+        label: Techniek
+        widget: text
+        hint: 'Bijvoorbeeld: Vlasstroken, deels beschilderd. Hangend aan metalen staaf'
+      - name: afmetingen
+        label: Afmetingen
+        widget: string
+        hint: 'Bijvoorbeeld: H 152 · B 94 · D 5 cm'
+      - name: collectie
+        label: Collectie
+        widget: string
+        required: false
+        hint: 'Alleen invullen als het werk in een collectie zit. Anders leeg laten.'
+      - name: volgorde
+        label: Volgorde binnen het jaar
+        widget: number
+        value_type: int
+        required: false
+        hint: 'Alleen van belang bij meerdere werken uit hetzelfde jaar. Een lager getal komt eerst.'
+      - name: fotos
+        label: Foto's
+        label_singular: Foto
+        widget: list
+        field: { name: foto, label: Foto, widget: image }
+        hint: 'De eerste foto is de foto die in de tijdsbalk staat. Versleep om de volgorde te wijzigen.'

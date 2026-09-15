@@ -1,0 +1,5 @@
+.DS_Store
+
+# De originelen uit de portfolio-pdf: 65 MB, blijven lokaal staan.
+# Ze zijn opnieuw af te leiden uit mama-portfolio.pdf als dat ooit nodig is.
+assets/raw/

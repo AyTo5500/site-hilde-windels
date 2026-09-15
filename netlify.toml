@@ -1,0 +1,15 @@
+# Netlify bouwt de site met dit bestand.
+# build.py zet de bestanden uit werken/ om naar index.html.
+
+[build]
+  command = "python3 build.py"
+  publish = "."
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+
+# De originelen uit de portfolio-pdf horen niet op de site thuis.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

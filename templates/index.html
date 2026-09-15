@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hilde Windels, beeldend kunstenaar</title>
+  <meta name="description" content="Het werk van Hilde Windels doorheen de jaren, 1990 tot 2025. Beeldend kunstenaar, werk in vlas." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page page--timeline">
+
+  <header class="bar">
+    <p class="bar__role">Beeldend kunstenaar</p>
+    <button class="burger" id="burger" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+    <nav class="bar__nav" id="menu" aria-label="Hoofdnavigatie">
+      <a href="index.html" class="is-current" aria-current="page">Werk</a>
+      <a href="over-mij.html">Over</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="stage">
+    <div class="stage__side">
+      <h1 class="display">Hilde<br />Windels</h1>
+      <p class="display__sub">Scroll doorheen de jaren, {{PERIODE}}</p>
+      <p class="focus" id="focus"><span class="focus__live" aria-live="polite">{{EERSTE_DETAIL}}</span></p>
+    </div>
+
+    <div class="timeline">
+      <ol class="tl__list" id="tl">
+{{WERKEN}}
+      </ol>
+    </div>
+  </main>
+
+  <div class="kijker" id="kijker" hidden>
+    <button class="kijker__sluit" id="kijker-sluit" type="button" aria-label="Sluiten"></button>
+    <button class="kijker__pijl kijker__pijl--vorige" id="kijker-vorige" type="button" aria-label="Vorige foto"></button>
+    <figure class="kijker__fig">
+      <img id="kijker-img" alt="" />
+      <figcaption class="kijker__cap">
+        <span class="kijker__titel" id="kijker-titel"></span>
+        <span class="kijker__detail" id="kijker-detail"></span>
+        <span class="kijker__teller" id="kijker-teller"></span>
+      </figcaption>
+    </figure>
+    <button class="kijker__pijl kijker__pijl--volgende" id="kijker-volgende" type="button" aria-label="Volgende foto"></button>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>

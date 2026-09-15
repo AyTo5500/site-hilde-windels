@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact, Hilde Windels</title>
+  <meta name="description" content="Contactgegevens van beeldend kunstenaar Hilde Windels, Gent." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page">
+
+  <header class="bar">
+    <a class="bar__home" href="index.html">Hilde Windels</a>
+    <button class="burger" id="burger" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+    <nav class="bar__nav" id="menu" aria-label="Hoofdnavigatie">
+      <a href="index.html">Werk</a>
+      <a href="over-mij.html">Over</a>
+      <a href="contact.html" class="is-current" aria-current="page">Contact</a>
+    </nav>
+  </header>
+
+  <main class="sheet">
+    <h1 class="display display--page">Contact</h1>
+
+    <div class="sheet__grid">
+      <div class="sheet__text">
+        <p class="lead">
+          Voor vragen over werk, tentoonstellingen of een bezoek aan het atelier.
+        </p>
+      </div>
+
+      <div class="sheet__data">
+        <dl class="data">
+          <div><dt>E-mail</dt><dd><a class="link" href="mailto:hilde.windels@telenet.be">hilde.windels@telenet.be</a></dd></div>
+          <div><dt>Telefoon</dt><dd><a class="link" href="tel:+32496126308">+32 496 12 63 08</a></dd></div>
+          <div><dt>Atelier</dt><dd>Bredestraat 216, 9041 Gent</dd></div>
+        </dl>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
