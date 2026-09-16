@@ -1,7 +1,7 @@
 {
   "titel": "Hurt",
   "jaar": 2019,
-  "techniek": "Vlaspanelen, olieverf, krijt, houtskool. \nInstallatie van vier stuks.",
+  "materiaal": "Vlaspanelen, olieverf, krijt, houtskool. \nInstallatie van vier stuks.",
   "afmetingen": "H 120 · B 80 · D 7 cm",
   "collectie": "",
   "volgorde": 3,
@@ -12,5 +12,6 @@
     "hurt-4.jpg",
     "hurt-5.jpg",
     "hurt-6.jpg"
-  ]
+  ],
+  "techniek": "Vlaspanelen, olieverf, krijt, houtskool. \nInstallatie van vier stuks."
 }
