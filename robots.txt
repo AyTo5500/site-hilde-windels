@@ -1,7 +1,6 @@
+# TIJDELIJK: de site is nog niet af.
+# Zet dit terug naar "Allow: /" zodra de inhoud klopt.
 User-agent: *
-Allow: /
-
-# Het bewerkscherm hoort niet in zoekresultaten thuis.
-Disallow: /admin/
+Disallow: /
 
 Sitemap: https://hilde-windels.com/sitemap.xml
