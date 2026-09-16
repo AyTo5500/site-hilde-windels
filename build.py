@@ -18,6 +18,11 @@ import time
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 FOTOMAP = os.path.join(HIER, "assets", "works")
+
+
+def lokaal(pad):
+    """Van /assets/works/x.jpg naar het bestand op schijf."""
+    return os.path.join(HIER, pad.lstrip("/"))
 DIRECT_LADEN = 4          # eerste vier foto's meteen, de rest bij naderen
 BASIS = "https://hilde-windels.com/"
 
@@ -79,10 +84,10 @@ def bouw_werk(werk, volgnummer):
         raise ValueError("werk zonder foto: %s" % werk["titel"])
 
     for f in fotos:
-        if not os.path.exists(os.path.join(FOTOMAP, f)):
-            raise ValueError("foto ontbreekt: assets/works/%s (bij %s)" % (f, werk["titel"]))
+        if not os.path.exists(lokaal(f)):
+            raise ValueError("foto ontbreekt: %s (bij %s)" % (f, werk["titel"]))
 
-    breedte, hoogte = jpeg_formaat(os.path.join(FOTOMAP, fotos[0]))
+    breedte, hoogte = jpeg_formaat(lokaal(fotos[0]))
     detail = beschrijving(werk)
     alt = "%s, %s" % (werk["titel"], werk["jaar"])
     aantal = "%d foto's" % len(fotos) if len(fotos) > 1 else "foto"
@@ -97,7 +102,7 @@ def bouw_werk(werk, volgnummer):
     return (
         '        <li class="tl__item" data-fotos="%s" data-detail="%s" style="--ar:%.4f">\n'
         '          <button class="tl__frame" type="button" aria-label="%s">'
-        '<img src="assets/works/%s"%s width="%d" height="%d" alt="%s" /></button>\n'
+        '<img src="%s"%s width="%d" height="%d" alt="%s" /></button>\n'
         '          <div class="tl__cap">\n'
         '            <h3 class="tl__title">%s</h3>\n'
         '            %s\n'
@@ -128,7 +133,7 @@ def sitemap(werken, paginas):
             for werk in werken:
                 for foto in werk["fotos"]:
                     regels.append("    <image:image>")
-                    regels.append("      <image:loc>%sassets/works/%s</image:loc>" % (BASIS, foto))
+                    regels.append("      <image:loc>%s%s</image:loc>" % (BASIS, foto.lstrip("/")))
                     regels.append("      <image:title>%s, %s</image:title>"
                                   % (escape_xml(werk["titel"]), werk["jaar"]))
                     regels.append("      <image:caption>%s</image:caption>"
@@ -172,7 +177,7 @@ def gestructureerde_data(werken):
                 "artform": "Textielkunst",
                 "artMedium": werk.get("materiaal", ""),
                 "creator": {"@id": BASIS + "#hilde-windels"},
-                "image": BASIS + "assets/works/" + werk["fotos"][0],
+                "image": BASIS + werk["fotos"][0].lstrip("/"),
             },
         })
 

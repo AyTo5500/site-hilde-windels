@@ -172,13 +172,13 @@
   function toon(i) {
     if (i < 0 || i >= reeks.length) return;
     index = i;
-    kImg.src = "assets/works/" + reeks[i];
+    kImg.src = reeks[i];
     kTeller.textContent = reeks.length > 1 ? (i + 1) + " / " + reeks.length : "";
     kVorige.disabled = i === 0;
     kVolgende.disabled = i === reeks.length - 1;
 
     /* de volgende alvast ophalen, zodat bladeren niet hapert */
-    if (reeks[i + 1]) new Image().src = "assets/works/" + reeks[i + 1];
+    if (reeks[i + 1]) new Image().src = reeks[i + 1];
   }
 
   function openKijker(item) {

@@ -6,8 +6,8 @@
   "collectie": "",
   "volgorde": 5,
   "fotos": [
-    "attached.jpg",
-    "attached-2.jpg",
-    "attached-3.jpg"
+    "/assets/works/attached.jpg",
+    "/assets/works/attached-2.jpg",
+    "/assets/works/attached-3.jpg"
   ]
 }

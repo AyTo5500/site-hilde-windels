@@ -5,7 +5,7 @@ backend:
   branch: main
 
 media_folder: assets/works
-public_folder: assets/works
+public_folder: /assets/works   # schuine streep vooraan, anders zoekt het CMS onder /admin/
 
 locale: nl
 

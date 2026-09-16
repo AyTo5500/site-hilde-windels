@@ -6,11 +6,11 @@
   "collectie": "",
   "volgorde": 3,
   "fotos": [
-    "hurt.jpg",
-    "hurt-2.jpg",
-    "hurt-3.jpg",
-    "hurt-4.jpg",
-    "hurt-5.jpg",
-    "hurt-6.jpg"
+    "/assets/works/hurt.jpg",
+    "/assets/works/hurt-2.jpg",
+    "/assets/works/hurt-3.jpg",
+    "/assets/works/hurt-4.jpg",
+    "/assets/works/hurt-5.jpg",
+    "/assets/works/hurt-6.jpg"
   ]
 }

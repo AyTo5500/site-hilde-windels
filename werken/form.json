@@ -6,7 +6,7 @@
   "collectie": "",
   "volgorde": 10,
   "fotos": [
-    "form.jpg",
-    "form-2.jpg"
+    "/assets/works/form.jpg",
+    "/assets/works/form-2.jpg"
   ]
 }
