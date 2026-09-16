@@ -16,6 +16,12 @@
   status = 301
   force = true
 
+# sitemap.xml wordt bij elke bouw opnieuw gemaakt, dus niet lang laten cachen.
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
 [[headers]]
   for = "/admin/*"
   [headers.values]

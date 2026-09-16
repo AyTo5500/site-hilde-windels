@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Het bewerkscherm hoort niet in zoekresultaten thuis.
+Disallow: /admin/
+
+Sitemap: https://hilde-windels.com/sitemap.xml
