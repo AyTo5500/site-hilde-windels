@@ -8,7 +8,14 @@
 [build.environment]
   PYTHON_VERSION = "3.11"
 
-# De originelen uit de portfolio-pdf horen niet op de site thuis.
+# Het oude netlify.app-adres doorsturen naar het echte domein, zodat er maar
+# een vindbare versie van de site bestaat en oude links blijven werken.
+[[redirects]]
+  from = "https://keen-belekoy-910ed7.netlify.app/*"
+  to = "https://hilde-windels.com/:splat"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/admin/*"
   [headers.values]
