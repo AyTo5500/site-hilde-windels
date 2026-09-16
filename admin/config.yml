@@ -25,8 +25,8 @@ collections:
     fields:
       - { name: titel, label: Titel, widget: string }
       - { name: jaar, label: Jaartal, widget: number, value_type: int, min: 1980, max: 2100 }
-      - name: techniek
-        label: Techniek
+      - name: materiaal
+        label: Materiaal
         widget: text
         hint: 'Bijvoorbeeld: Vlasstroken, deels beschilderd. Hangend aan metalen staaf'
       - name: afmetingen

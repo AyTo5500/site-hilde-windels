@@ -50,7 +50,7 @@ def jpeg_formaat(pad):
 
 
 def beschrijving(werk):
-    delen = [werk.get("techniek", ""), werk.get("afmetingen", ""), werk.get("collectie", "")]
+    delen = [werk.get("materiaal", ""), werk.get("afmetingen", ""), werk.get("collectie", "")]
     return ". ".join(d.strip() for d in delen if d and d.strip())
 
 
@@ -158,7 +158,7 @@ def gestructureerde_data(werken):
                 "name": werk["titel"],
                 "dateCreated": str(werk["jaar"]),
                 "artform": "Textielkunst",
-                "artMedium": werk.get("techniek", ""),
+                "artMedium": werk.get("materiaal", ""),
                 "creator": {"@id": BASIS + "#hilde-windels"},
                 "image": BASIS + "assets/works/" + werk["fotos"][0],
             },
