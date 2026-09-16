@@ -48,5 +48,6 @@ collections:
         label: Foto's
         label_singular: Foto
         widget: list
-        field: { name: foto, label: Foto, widget: image }
+        collapsed: false
+        field: { name: foto, label: Foto, widget: image, allow_multiple: true }
         hint: 'De eerste foto is de foto die in de tijdsbalk staat. Versleep om de volgorde te wijzigen.'

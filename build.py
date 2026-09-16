@@ -50,8 +50,20 @@ def jpeg_formaat(pad):
 
 
 def beschrijving(werk):
+    """De losse velden aan elkaar tot een zin.
+
+    Bestand tegen hoe mensen echt typen: regeleindes, dubbele spaties en een
+    punt aan het eind van een veld. Zonder dit wordt "stuks." plus ". " samen
+    "stuks..", en dat is precies wat er gebeurde.
+    """
     delen = [werk.get("materiaal", ""), werk.get("afmetingen", ""), werk.get("collectie", "")]
-    return ". ".join(d.strip() for d in delen if d and d.strip())
+    schoon = []
+    for deel in delen:
+        tekst = " ".join(str(deel).split())      # regeleindes en dubbele spaties weg
+        tekst = tekst.rstrip(". ")               # eindpunt weg, wij voegen zelf ". " toe
+        if tekst:
+            schoon.append(tekst)
+    return ". ".join(schoon)
 
 
 def attr(tekst):
