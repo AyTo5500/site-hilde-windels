@@ -208,6 +208,16 @@ img { display: block; }
 }
 .tl__item:hover .tl__frame img { opacity: 0.82; }
 
+/* Foto's niet zomaar laten opslaan: geen slepen, geen selectie en op de
+   gsm geen menu bij lang drukken. Het rechtsklikmenu blokkeert script.js. */
+.tl__frame img,
+.kijker__fig img {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 .tl__cap {
   position: relative;
   display: flex;
@@ -398,6 +408,13 @@ img { display: block; }
 }
 .data > div:last-child { border-bottom: 1px solid var(--line); }
 .data dt { color: var(--ink-soft); }
+
+.rechten {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
 .data dd { color: var(--ink); text-align: right; overflow-wrap: anywhere; }
 .link { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: border-color .3s var(--ease); }
 .link:hover { border-color: var(--ink); }

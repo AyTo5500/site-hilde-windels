@@ -64,6 +64,16 @@
   }, { passive: true });
 })();
 
+/* ---- Foto's beschermen ----
+   Geen rechtsklikmenu en niet slepen op de werkfoto's. Tegenhouden kan
+   nooit helemaal, een screenshot werkt altijd, maar opslaan wordt lastiger. */
+document.addEventListener("contextmenu", function (e) {
+  if (e.target.tagName === "IMG") e.preventDefault();
+});
+document.addEventListener("dragstart", function (e) {
+  if (e.target.tagName === "IMG") e.preventDefault();
+});
+
 (function () {
   "use strict";
 
