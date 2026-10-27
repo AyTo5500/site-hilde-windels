@@ -61,14 +61,17 @@ def beschrijving(werk):
     punt aan het eind van een veld. Zonder dit wordt "stuks." plus ". " samen
     "stuks..", en dat is precies wat er gebeurde.
     """
-    delen = [werk.get("materiaal", ""), werk.get("afmetingen", ""), werk.get("collectie", "")]
+    fotograaf = " ".join(str(werk.get("fotograaf", "")).split())
+    delen = [werk.get("materiaal", ""), werk.get("afmetingen", ""), werk.get("collectie", ""),
+             "Foto %s" % fotograaf if fotograaf else ""]
     schoon = []
     for deel in delen:
         tekst = " ".join(str(deel).split())      # regeleindes en dubbele spaties weg
         tekst = tekst.rstrip(". ")               # eindpunt weg, wij voegen zelf ". " toe
         if tekst:
             schoon.append(tekst)
-    return ". ".join(schoon)
+    # "(per stuk)" nooit over twee regels laten breken
+    return ". ".join(schoon).replace(" (per stuk)", " (per stuk)")
 
 
 def attr(tekst):
@@ -222,7 +225,7 @@ def main():
     pagina = (sjabloon
               .replace("{{WERKEN}}", lijst.rstrip("\n"))
               .replace("{{EERSTE_DETAIL}}", html.escape(beschrijving(werken[0])))
-              .replace("{{PERIODE}}", "%d tot %d" % (max(jaren), min(jaren))))
+              .replace("{{OUDSTE}}", str(min(jaren))))
 
     pagina = pagina.replace("{{GESTRUCTUREERDE_DATA}}", gestructureerde_data(werken))
 

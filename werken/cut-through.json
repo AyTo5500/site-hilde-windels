@@ -1,13 +1,14 @@
 {
-  "titel": "Cut Trough",
+  "titel": "Cut Through",
   "jaar": 2005,
   "materiaal": "Vlasvezel op raam en vloer. In situ, Industriemuseum (MIAT) Gent",
   "afmetingen": "H 600 · B 1200 cm",
   "collectie": "",
+  "fotograaf": "Jeroen Windels",
   "volgorde": 11,
   "fotos": [
-    "/assets/works/cut-trough.jpg",
-    "/assets/works/cut-trough-2.jpg",
-    "/assets/works/cut-trough-3.jpg"
+    "/assets/works/cut-through.jpg",
+    "/assets/works/cut-through-2.jpg",
+    "/assets/works/cut-through-3.jpg"
   ]
 }

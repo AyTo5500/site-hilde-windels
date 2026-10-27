@@ -38,6 +38,11 @@ collections:
         widget: string
         required: false
         hint: 'Alleen invullen als het werk in een collectie zit. Anders leeg laten.'
+      - name: fotograaf
+        label: Fotograaf
+        widget: string
+        required: false
+        hint: 'Alleen de naam, bijvoorbeeld: Jeroen Windels. Op de site komt er "Foto" voor.'
       - name: volgorde
         label: Volgorde binnen het jaar
         widget: number
