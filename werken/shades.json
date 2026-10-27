@@ -7,8 +7,8 @@
   "fotograaf": "",
   "volgorde": 8,
   "fotos": [
-    "/assets/works/shades.jpg",
     "/assets/works/shades-2.jpg",
-    "/assets/works/shades-3.jpg"
+    "/assets/works/shades-3.jpg",
+    "/assets/works/shades.jpg"
   ]
 }

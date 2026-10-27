@@ -86,7 +86,7 @@
       var sizer = document.createElement("span");
       sizer.className = "focus__sizer";
       sizer.setAttribute("aria-hidden", "true");
-      sizer.textContent = el.getAttribute("data-detail") || "";
+      sizer.innerHTML = el.getAttribute("data-detail") || "";
       focus.appendChild(sizer);
     });
   }
@@ -100,7 +100,7 @@
     var text = item.getAttribute("data-detail") || "";
     live.classList.add("is-fading");
     window.setTimeout(function () {
-      live.textContent = text;
+      live.innerHTML = text;
       live.classList.remove("is-fading");
     }, reduced ? 0 : 180);
   }
@@ -160,6 +160,7 @@
 
   var kImg = document.getElementById("kijker-img");
   var kTitel = document.getElementById("kijker-titel");
+  var kJaar = document.getElementById("kijker-jaar");
   var kDetail = document.getElementById("kijker-detail");
   var kTeller = document.getElementById("kijker-teller");
   var kVorige = document.getElementById("kijker-vorige");
@@ -186,8 +187,8 @@
     if (!reeks.length) return;
     opener = item.querySelector(".tl__frame");
     kTitel.textContent = item.querySelector(".tl__title").textContent;
-    kDetail.textContent = item.querySelector(".tl__year").textContent +
-      ". " + (item.getAttribute("data-detail") || "");
+    kJaar.textContent = item.querySelector(".tl__year").textContent;
+    kDetail.innerHTML = item.getAttribute("data-detail") || "";
     kImg.alt = kTitel.textContent;
     kijker.hidden = false;
     document.body.classList.add("is-kijker-open");

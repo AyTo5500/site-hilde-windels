@@ -149,6 +149,16 @@ img { display: block; }
 .focus__live.is-fading { opacity: 0; }
 .focus__sizer { visibility: hidden; pointer-events: none; }
 
+/* De gegevens van een werk, elk op een eigen regel: eerst wat het is,
+   dan de maten, en de fotograaf kleiner en wat los eronder. */
+.d { display: block; }
+.d--foto {
+  margin-top: 0.7em;
+  font-size: 0.85em;
+  letter-spacing: 0.01em;
+  opacity: 0.8;
+}
+
 .timeline {
   --tl-h: clamp(180px, 42svh, 460px);
   overflow-x: auto;
@@ -456,7 +466,7 @@ img { display: block; }
 }
 .kijker__fig img {
   max-width: 100%;
-  max-height: 72svh;
+  max-height: 66svh;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -464,16 +474,27 @@ img { display: block; }
 
 .kijker__cap {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: baseline;
-  gap: 0.5rem 1.25rem;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  max-width: 70ch;
+  max-width: 60ch;
 }
+.kijker__kop { display: flex; align-items: baseline; gap: 0.75rem; }
 .kijker__titel { font-size: 1.05rem; color: var(--ink); }
-.kijker__detail,
-.kijker__teller { font-size: 0.85rem; color: var(--ink-soft); }
+.kijker__jaar { font-size: 0.85rem; color: var(--ink-soft); }
+.kijker__detail {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.kijker__teller {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.kijker__teller:empty { display: none; }
 
 /* Knoppen: haarlijnen, in dezelfde taal als de rest */
 .kijker__sluit,

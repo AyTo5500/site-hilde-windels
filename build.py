@@ -54,24 +54,38 @@ def jpeg_formaat(pad):
             f.seek(lengte - 2, 1)
 
 
-def beschrijving(werk):
-    """De losse velden aan elkaar tot een zin.
+def regels(werk):
+    """De losse velden van een werk, elk opgeschoond, als (soort, tekst).
 
     Bestand tegen hoe mensen echt typen: regeleindes, dubbele spaties en een
     punt aan het eind van een veld. Zonder dit wordt "stuks." plus ". " samen
     "stuks..", en dat is precies wat er gebeurde.
     """
     fotograaf = " ".join(str(werk.get("fotograaf", "")).split())
-    delen = [werk.get("materiaal", ""), werk.get("afmetingen", ""), werk.get("collectie", ""),
-             "Foto %s" % fotograaf if fotograaf else ""]
+    velden = [("materiaal", werk.get("materiaal", "")),
+              ("maten", werk.get("afmetingen", "")),
+              ("collectie", werk.get("collectie", "")),
+              ("foto", "Foto %s" % fotograaf if fotograaf else "")]
     schoon = []
-    for deel in delen:
+    for soort, deel in velden:
         tekst = " ".join(str(deel).split())      # regeleindes en dubbele spaties weg
-        tekst = tekst.rstrip(". ")               # eindpunt weg, wij voegen zelf ". " toe
+        tekst = tekst.rstrip(". ")               # eindpunt weg, de opmaak scheidt zelf
+        # "(per stuk)" nooit over twee regels laten breken
+        tekst = tekst.replace(" (per stuk)", "\u00a0(per\u00a0stuk)")
         if tekst:
-            schoon.append(tekst)
-    # "(per stuk)" nooit over twee regels laten breken
-    return ". ".join(schoon).replace(" (per stuk)", " (per stuk)")
+            schoon.append((soort, tekst))
+    return schoon
+
+
+def beschrijving(werk):
+    """De velden aan elkaar tot een zin, voor zoekmachines."""
+    return ". ".join(tekst for _, tekst in regels(werk))
+
+
+def detail_html(werk):
+    """De velden als losse regels, elk met een eigen klasse voor de opmaak."""
+    return "".join('<span class="d d--%s">%s</span>' % (soort, html.escape(tekst))
+                   for soort, tekst in regels(werk))
 
 
 def attr(tekst):
@@ -91,7 +105,7 @@ def bouw_werk(werk, volgnummer):
             raise ValueError("foto ontbreekt: %s (bij %s)" % (f, werk["titel"]))
 
     breedte, hoogte = jpeg_formaat(lokaal(fotos[0]))
-    detail = beschrijving(werk)
+    detail = detail_html(werk)
     alt = "%s, %s" % (werk["titel"], werk["jaar"])
     aantal = "%d foto's" % len(fotos) if len(fotos) > 1 else "foto"
     lui = "" if volgnummer < DIRECT_LADEN else ' loading="lazy"'
@@ -224,7 +238,7 @@ def main():
     jaren = [int(w["jaar"]) for w in werken]
     pagina = (sjabloon
               .replace("{{WERKEN}}", lijst.rstrip("\n"))
-              .replace("{{EERSTE_DETAIL}}", html.escape(beschrijving(werken[0])))
+              .replace("{{EERSTE_DETAIL}}", detail_html(werken[0]))
               .replace("{{OUDSTE}}", str(min(jaren))))
 
     pagina = pagina.replace("{{GESTRUCTUREERDE_DATA}}", gestructureerde_data(werken))
