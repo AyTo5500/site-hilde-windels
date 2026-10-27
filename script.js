@@ -15,7 +15,7 @@
   function zet(open) {
     document.body.classList.toggle("is-menu-open", open);
     burger.setAttribute("aria-expanded", open ? "true" : "false");
-    burger.setAttribute("aria-label", open ? "Menu sluiten" : "Menu openen");
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
   }
 
   burger.addEventListener("click", function () {

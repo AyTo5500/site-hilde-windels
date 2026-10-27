@@ -16,6 +16,12 @@
   status = 301
   force = true
 
+# De pagina Over heette vroeger over-mij.html; oude links blijven werken.
+[[redirects]]
+  from = "/over-mij.html"
+  to = "/about.html"
+  status = 301
+
 # ======================================================================
 # TIJDELIJK: de site is nog niet af, dus zoekmachines blijven weg.
 # Verwijder dit hele blok zodra de werken en teksten kloppen, push, en

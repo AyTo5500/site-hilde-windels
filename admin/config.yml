@@ -28,21 +28,21 @@ collections:
       - name: materiaal
         label: Materiaal
         widget: text
-        hint: 'Bijvoorbeeld: Vlasstroken, deels beschilderd. Hangend aan metalen staaf'
+        hint: 'In het Engels, bijvoorbeeld: Flax strips, partly painted. Suspended from a metal rod'
       - name: afmetingen
         label: Afmetingen
         widget: string
-        hint: 'Bijvoorbeeld: H 152 · B 94 · D 5 cm'
+        hint: 'In het Engels: B wordt W (width). Bijvoorbeeld: H 152 · W 94 · D 5 cm'
       - name: collectie
         label: Collectie
         widget: string
         required: false
-        hint: 'Alleen invullen als het werk in een collectie zit. Anders leeg laten.'
+        hint: 'Alleen invullen als het werk in een collectie zit, in het Engels. Bijvoorbeeld: Collection Huis Perrekes, Oosterlo'
       - name: fotograaf
         label: Fotograaf
         widget: string
         required: false
-        hint: 'Alleen de naam, bijvoorbeeld: Jeroen Windels. Op de site komt er "Foto" voor.'
+        hint: 'Alleen de naam, bijvoorbeeld: Jeroen Windels. Op de site komt er "Photo" voor.'
       - name: volgorde
         label: Volgorde binnen het jaar
         widget: number

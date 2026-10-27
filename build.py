@@ -65,13 +65,13 @@ def regels(werk):
     velden = [("materiaal", werk.get("materiaal", "")),
               ("maten", werk.get("afmetingen", "")),
               ("collectie", werk.get("collectie", "")),
-              ("foto", "Foto %s" % fotograaf if fotograaf else "")]
+              ("foto", "Photo %s" % fotograaf if fotograaf else "")]
     schoon = []
     for soort, deel in velden:
         tekst = " ".join(str(deel).split())      # regeleindes en dubbele spaties weg
         tekst = tekst.rstrip(". ")               # eindpunt weg, de opmaak scheidt zelf
-        # "(per stuk)" nooit over twee regels laten breken
-        tekst = tekst.replace(" (per stuk)", "\u00a0(per\u00a0stuk)")
+        # "(each)" nooit los op een nieuwe regel laten vallen
+        tekst = tekst.replace(" (each)", "\u00a0(each)")
         if tekst:
             schoon.append((soort, tekst))
     return schoon
@@ -107,12 +107,12 @@ def bouw_werk(werk, volgnummer):
     breedte, hoogte = jpeg_formaat(lokaal(fotos[0]))
     detail = detail_html(werk)
     alt = "%s, %s" % (werk["titel"], werk["jaar"])
-    aantal = "%d foto's" % len(fotos) if len(fotos) > 1 else "foto"
+    aantal = "%d photos" % len(fotos) if len(fotos) > 1 else "photo"
     lui = "" if volgnummer < DIRECT_LADEN else ' loading="lazy"'
 
     if len(fotos) > 1:
         regel = ('<span class="tl__regel"><span class="tl__year">%s</span>'
-                 '<span class="tl__meer">%d foto\'s</span></span>' % (werk["jaar"], len(fotos)))
+                 '<span class="tl__meer">%d photos</span></span>' % (werk["jaar"], len(fotos)))
     else:
         regel = '<span class="tl__year">%s</span>' % werk["jaar"]
 
@@ -127,7 +127,7 @@ def bouw_werk(werk, volgnummer):
         '        </li>\n'
     ) % (
         attr("|".join(fotos)), attr(detail), breedte / hoogte,
-        attr("%s, %s, %s bekijken" % (werk["titel"], werk["jaar"], aantal)),
+        attr("View %s, %s, %s" % (werk["titel"], werk["jaar"], aantal)),
         fotos[0], lui, breedte, hoogte, attr(alt),
         html.escape(werk["titel"]), regel,
     )
@@ -173,13 +173,13 @@ def gestructureerde_data(werken):
         "@type": "Person",
         "@id": BASIS + "#hilde-windels",
         "name": "Hilde Windels",
-        "jobTitle": "Beeldend kunstenaar",
+        "jobTitle": "Visual artist",
         "url": BASIS,
         "image": BASIS + "assets/preview.jpg",
-        "birthPlace": {"@type": "Place", "name": "Tielt, Belgi\u00eb"},
-        "address": {"@type": "PostalAddress", "addressLocality": "Gent",
+        "birthPlace": {"@type": "Place", "name": "Tielt, Belgium"},
+        "address": {"@type": "PostalAddress", "addressLocality": "Ghent",
                     "addressCountry": "BE"},
-        "knowsAbout": ["Vlas", "Textielkunst", "Beeldende kunst"],
+        "knowsAbout": ["Flax", "Textile art", "Visual art"],
     }
 
     items = []
@@ -191,7 +191,7 @@ def gestructureerde_data(werken):
                 "@type": "VisualArtwork",
                 "name": werk["titel"],
                 "dateCreated": str(werk["jaar"]),
-                "artform": "Textielkunst",
+                "artform": "Textile art",
                 "artMedium": werk.get("materiaal", ""),
                 "creator": {"@id": BASIS + "#hilde-windels"},
                 "image": BASIS + werk["fotos"][0].lstrip("/"),
@@ -203,8 +203,8 @@ def gestructureerde_data(werken):
         "@graph": [
             kunstenaar,
             {"@type": "WebSite", "url": BASIS, "name": "Hilde Windels",
-             "inLanguage": "nl-BE", "about": {"@id": BASIS + "#hilde-windels"}},
-            {"@type": "ItemList", "name": "Werk van Hilde Windels, 1990 tot heden",
+             "inLanguage": "en", "about": {"@id": BASIS + "#hilde-windels"}},
+            {"@type": "ItemList", "name": "Work by Hilde Windels, 1990 to present",
              "numberOfItems": len(werken), "itemListElement": items},
         ],
     }
@@ -247,7 +247,7 @@ def main():
         f.write(pagina)
 
     with open(os.path.join(HIER, "sitemap.xml"), "w", encoding="utf-8") as f:
-        f.write(sitemap(werken, [("", "1.0"), ("over-mij.html", "0.8"),
+        f.write(sitemap(werken, [("", "1.0"), ("about.html", "0.8"),
                                  ("contact.html", "0.5")]))
 
     print("index.html gebouwd: %d werken, %d foto's"
