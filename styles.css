@@ -152,7 +152,7 @@ img { display: block; }
   visibility: hidden;
   pointer-events: none;
   /* plaats voor de pijltjes, die direct onder de zichtbare tekst staan */
-  padding-bottom: calc(2.75rem + 0.6rem);
+  padding-bottom: calc(2.75rem + 1.2rem);
 }
 
 /* Bladeren door de tijdsbalk, per scherm vol werken. Direct onder de
@@ -162,7 +162,7 @@ img { display: block; }
 .bladeren {
   display: flex;
   gap: 0.25rem;
-  margin: 0.6rem 0 0 -0.95rem;
+  margin: 1.2rem 0 0 -0.95rem;
 }
 
 /* De gegevens van een werk, elk op een eigen regel: eerst wat het is,
