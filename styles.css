@@ -491,6 +491,7 @@ img { display: block; }
   line-height: 1.6;
   color: var(--ink-soft);
 }
+.rechten--maker { margin-top: 0.4rem; }
 .data dd { color: var(--ink); text-align: right; overflow-wrap: anywhere; }
 .link { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: border-color .3s var(--ease); }
 .link:hover { border-color: var(--ink); }
