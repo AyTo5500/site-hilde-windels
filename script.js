@@ -175,13 +175,21 @@ document.addEventListener("dragstart", function (e) {
     track.scrollTo({ left: Math.max(0, Math.min(max, x)), behavior: reduced ? "auto" : "smooth" });
   }
 
+  /* De witte marge links van de balk (op de gsm). Een werk staat "vooraan"
+     als het op die marge aansluit, niet tegen de rand van het scherm. */
+  function marge() {
+    return parseFloat(getComputedStyle(list).paddingLeft) || 0;
+  }
+
   function volgende() {
+    var m = marge();
+    var start = track.scrollLeft + m;
     var rand = track.scrollLeft + track.clientWidth;
     var p = plekken();
     for (var i = 0; i < p.length; i++) {
-      if (p[i].einde > rand + 2) {
-        /* staat dit werk al vooraan (breder dan het scherm), schuif dan een scherm */
-        naar(p[i].begin > track.scrollLeft + 2 ? p[i].begin : track.scrollLeft + track.clientWidth);
+      /* het eerste werk na het voorste dat niet helemaal in beeld staat */
+      if (p[i].begin > start + 2 && p[i].einde > rand + 2) {
+        naar(p[i].begin - m);
         return;
       }
     }
@@ -189,10 +197,12 @@ document.addEventListener("dragstart", function (e) {
   }
 
   function vorige() {
+    var m = marge();
     var doel = track.scrollLeft - track.clientWidth;
     var p = plekken();
     for (var i = 0; i < p.length; i++) {
-      if (p[i].begin >= doel - 2) { naar(p[i].begin < track.scrollLeft - 2 ? p[i].begin : doel); return; }
+      var x = p[i].begin - m;
+      if (x >= doel - 2) { naar(x < track.scrollLeft - 2 ? x : doel); return; }
     }
     naar(0);
   }
