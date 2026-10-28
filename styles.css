@@ -123,12 +123,27 @@ img { display: block; }
 
 /* Alles in deze kolom een maat groter dan het zetsel elders */
 .stage__side .display { font-size: clamp(3rem, 7.4vw, 7.6rem); }
-.stage__side .display__sub { font-size: 1.05rem; margin-top: 1.1rem; }
+.stage__side .display__sub { font-size: 1.05rem; }
 .stage__side .focus { font-size: 1.05rem; line-height: 1.55; }
 
 .stage__side {
   /* zelfde linkermarge als de kopbalk, zodat alles op een lijn staat */
   padding: 0 clamp(1.5rem, 3vw, 3rem) 0 var(--pad);
+}
+.stage__side .display__sub { margin-top: 1.1rem; }
+
+/* Breed scherm: de kolom is minstens even hoog als de tijdsbalk. De naam
+   staat bovenaan, gelijk met de bovenkant van de foto's; beschrijving en
+   pijltjes onderaan, gelijk met de tijdas. */
+@media (min-width: 1001px) {
+  .stage__side {
+    min-height: calc(var(--tl-h) + 6.6rem + 1px);   /* foto + bijschrift + as */
+    display: flex;
+    flex-direction: column;
+  }
+  /* de hoofdletter zelf, niet de regelruimte erboven, tegen de bovenrand */
+  .stage__side .display { margin-top: -0.17em; }
+  .stage__side .display__sub { margin-top: auto; padding-top: 1.1rem; }
 }
 
 /* Details van het werk waar je staat; verandert bij hover en bij scrollen */
@@ -171,8 +186,8 @@ img { display: block; }
   opacity: 0.8;
 }
 
+.stage { --tl-h: clamp(180px, 42svh, 460px); }
 .timeline {
-  --tl-h: clamp(180px, 42svh, 460px);
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 1px;
@@ -387,7 +402,7 @@ img { display: block; }
   .page--timeline { overflow: auto; }
   .stage { height: auto; padding-bottom: 2rem; }
   .stage__side .display { font-size: clamp(2.4rem, 4.5vw, 3.5rem); }
-  .timeline { --tl-h: 240px; }
+  .stage { --tl-h: 240px; }
 }
 
 /* =========================================================
@@ -504,6 +519,8 @@ img { display: block; }
 .kijker[hidden] { display: none; }
 
 .kijker__fig {
+  /* bovenaan vast, zodat een langere beschrijving de foto niet verschuift */
+  align-self: start;
   margin: 0;
   min-width: 0;
   display: flex;
@@ -511,11 +528,11 @@ img { display: block; }
   align-items: center;
   gap: clamp(0.75rem, 2svh, 1.25rem);
 }
+/* Een vast vak voor de foto: staand of liggend, de tekst eronder staat
+   altijd op dezelfde plek. */
 .kijker__fig img {
-  max-width: 100%;
-  max-height: 66svh;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 66svh;
   object-fit: contain;
 }
 
@@ -596,6 +613,9 @@ img { display: block; }
 .pijl--vorige[disabled]:hover::before   { transform: translate(-30%, -50%) rotate(45deg); }
 .pijl--volgende[disabled]:hover::before { transform: translate(-70%, -50%) rotate(-135deg); }
 
+/* in de kijker midden naast het fotovak */
+.kijker__pijl { align-self: start; margin-top: calc(33svh - 1.375rem); }
+
 /* Geen scroll achter de kijker */
 .is-kijker-open { overflow: hidden; }
 
@@ -608,10 +628,11 @@ img { display: block; }
   .kijker__pijl {
     position: absolute;
     bottom: 1.25rem;
+    margin-top: 0;
     z-index: 1;
   }
   .kijker__pijl--vorige   { left: 0.75rem; }
   .kijker__pijl--volgende { right: 0.75rem; }
   .kijker__pijl[hidden]   { display: none; }
-  .kijker__fig img { max-height: 62svh; }
+  .kijker__fig img { height: 58svh; }
 }
