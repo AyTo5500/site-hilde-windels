@@ -292,7 +292,7 @@ document.addEventListener("dragstart", function (e) {
     if (reeks[i + 1]) new Image().src = reeks[i + 1];
   }
 
-  function openKijker(item) {
+  function openKijker(item, metToetsenbord) {
     reeks = (item.getAttribute("data-fotos") || "").split("|").filter(Boolean);
     if (!reeks.length) return;
     opener = item.querySelector(".tl__frame");
@@ -303,7 +303,11 @@ document.addEventListener("dragstart", function (e) {
     kijker.hidden = false;
     document.body.classList.add("is-kijker-open");
     toon(0);
-    document.getElementById("kijker-sluit").focus();
+    /* Met het toetsenbord geopend: de sluitknop krijgt de focus, zodat je
+       meteen verder kan. Met muis of vinger: de kijker zelf, anders tekent
+       de browser een kader rond het kruisje. */
+    if (metToetsenbord) document.getElementById("kijker-sluit").focus();
+    else kijker.focus({ preventScroll: true });
   }
 
   function sluit() {
@@ -314,7 +318,9 @@ document.addEventListener("dragstart", function (e) {
   }
 
   items.forEach(function (item) {
-    item.querySelector(".tl__frame").addEventListener("click", function () { openKijker(item); });
+    item.querySelector(".tl__frame").addEventListener("click", function (e) {
+      openKijker(item, e.detail === 0);   /* detail 0: Enter of spatie, geen klik */
+    });
   });
 
   document.getElementById("kijker-sluit").addEventListener("click", sluit);

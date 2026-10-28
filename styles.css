@@ -546,6 +546,7 @@ img { display: block; }
   background: var(--bg);
 }
 .kijker[hidden] { display: none; }
+.kijker:focus { outline: none; }
 
 .kijker__fig {
   /* bovenaan vast, zodat een langere beschrijving de foto niet verschuift */
