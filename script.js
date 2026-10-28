@@ -164,6 +164,33 @@ document.addEventListener("dragstart", function (e) {
 
   show(items[0]);
 
+  /* ---- Duwtje: laten zien dat de balk scrollt ----
+     Een keer per bezoek, zodra de balk goed in beeld is en zolang je zelf
+     nog niet gescrold hebt. Elke aanraking stopt het meteen. */
+  function duw(el) {
+    if (reduced) return;
+    el.classList.remove("is-duw");
+    void el.offsetWidth;                 /* animatie opnieuw kunnen starten */
+    el.classList.add("is-duw");
+  }
+  function stopDuw() { list.classList.remove("is-duw"); }
+  list.addEventListener("animationend", stopDuw);
+  ["pointerdown", "touchstart", "wheel"].forEach(function (t) {
+    track.addEventListener(t, stopDuw, { passive: true });
+  });
+
+  if ("IntersectionObserver" in window && track.scrollWidth > track.clientWidth) {
+    var wacht = null;
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) { clearTimeout(wacht); return; }
+      wacht = setTimeout(function () {
+        io.disconnect();
+        if (track.scrollLeft < 8) duw(list);
+      }, 900);
+    }, { threshold: 0.6 });
+    io.observe(track);
+  }
+
   /* ---- Kijker: de foto's van een werk op ware grootte ---- */
   var kijker = document.getElementById("kijker");
   if (!kijker) return;
@@ -177,11 +204,13 @@ document.addEventListener("dragstart", function (e) {
   var kVolgende = document.getElementById("kijker-volgende");
 
   var reeks = [];
+  var alGeduwd = false;
   var index = 0;
   var opener = null;
 
   function toon(i) {
     if (i < 0 || i >= reeks.length) return;
+    kImg.classList.remove("is-duw");
     index = i;
     kImg.src = reeks[i];
     kTeller.textContent = reeks.length > 1 ? (i + 1) + " / " + reeks.length : "";
@@ -204,6 +233,13 @@ document.addEventListener("dragstart", function (e) {
     document.body.classList.add("is-kijker-open");
     toon(0);
     document.getElementById("kijker-sluit").focus();
+
+    /* De eerste keer dat je een werk met meerdere foto's opent: de foto
+       schuift even op, zodat je ziet dat je kan bladeren of vegen. */
+    if (reeks.length > 1 && !alGeduwd) {
+      alGeduwd = true;
+      setTimeout(function () { duw(kImg); }, 450);
+    }
   }
 
   function sluit() {

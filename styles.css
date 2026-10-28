@@ -208,6 +208,24 @@ img { display: block; }
 }
 .tl__item:hover .tl__frame img { opacity: 0.82; }
 
+/* Eenmalig duwtje: de balk schuift even op en veert terug, zodat je ziet
+   dat er meer is. Hetzelfde voor de foto in de kijker bij meerdere foto's. */
+@keyframes duw {
+  0%   { transform: translateX(0); }
+  35%  { transform: translateX(calc(-1 * var(--duw, 64px))); }
+  62%  { transform: translateX(0); }
+  80%  { transform: translateX(calc(-0.28 * var(--duw, 64px))); }
+  100% { transform: translateX(0); }
+}
+.is-duw { animation: duw 1.5s cubic-bezier(0.45, 0, 0.25, 1) both; }
+.kijker__fig img.is-duw { --duw: 44px; }
+@media (max-width: 700px) {
+  .tl__list.is-duw { --duw: 96px; }   /* het eerste werk vult bijna het scherm */
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-duw { animation: none; }
+}
+
 /* Foto's niet zomaar laten opslaan: geen slepen, geen selectie en op de
    gsm geen menu bij lang drukken. Het rechtsklikmenu blokkeert script.js. */
 .tl__frame img,
