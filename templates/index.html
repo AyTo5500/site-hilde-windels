@@ -26,7 +26,7 @@
   <link rel="apple-touch-icon" href="favicon.png" />
   {{GESTRUCTUREERDE_DATA}}
 
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body class="page page--timeline">
 
@@ -47,6 +47,10 @@
       <h1 class="display">Hilde<br />Windels</h1>
       <p class="display__sub">Scroll through the timeline, from today back to {{OUDSTE}}</p>
       <p class="focus" id="focus"><span class="focus__live" aria-live="polite">{{EERSTE_DETAIL}}</span></p>
+      <div class="bladeren">
+        <button class="pijl pijl--vorige" id="tl-vorige" type="button" aria-label="Previous works" disabled></button>
+        <button class="pijl pijl--volgende" id="tl-volgende" type="button" aria-label="Next works"></button>
+      </div>
     </div>
 
     <div class="timeline">
@@ -58,19 +62,19 @@
 
   <div class="kijker" id="kijker" hidden>
     <button class="kijker__sluit" id="kijker-sluit" type="button" aria-label="Close"></button>
-    <button class="kijker__pijl kijker__pijl--vorige" id="kijker-vorige" type="button" aria-label="Previous photo"></button>
+    <button class="pijl pijl--vorige kijker__pijl kijker__pijl--vorige" id="kijker-vorige" type="button" aria-label="Previous photo"></button>
     <figure class="kijker__fig">
-      <span class="kijker__beeld" id="kijker-beeld"><img id="kijker-img" alt="" /><img class="kijker__gluur" id="kijker-gluur" alt="" aria-hidden="true" /></span>
+      <img id="kijker-img" alt="" />
       <figcaption class="kijker__cap">
         <span class="kijker__kop"><span class="kijker__titel" id="kijker-titel"></span><span class="kijker__jaar" id="kijker-jaar"></span></span>
         <span class="kijker__detail" id="kijker-detail"></span>
         <span class="kijker__teller" id="kijker-teller"></span>
       </figcaption>
     </figure>
-    <button class="kijker__pijl kijker__pijl--volgende" id="kijker-volgende" type="button" aria-label="Next photo"></button>
+    <button class="pijl pijl--volgende kijker__pijl kijker__pijl--volgende" id="kijker-volgende" type="button" aria-label="Next photo"></button>
   </div>
 
 
-  <script src="script.js?v=9"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>

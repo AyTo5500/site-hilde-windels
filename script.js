@@ -155,11 +155,67 @@ document.addEventListener("dragstart", function (e) {
     track.scrollLeft = next;
   }, { passive: false });
 
-  /* ---- Pijltjestoetsen ---- */
+  /* ---- Bladeren per reeks ----
+     Volgende: het eerste werk dat niet helemaal in beeld staat, komt
+     vooraan. Vorige: een scherm terug, uitgelijnd op het begin van een werk.
+     Zo zie je telkens een nieuwe reeks, niet een werk verder. */
+  var tlVorige = document.getElementById("tl-vorige");
+  var tlVolgende = document.getElementById("tl-volgende");
+
+  function plekken() {
+    var basis = track.getBoundingClientRect().left - track.scrollLeft;
+    return items.map(function (el) {
+      var r = el.getBoundingClientRect();
+      return { begin: r.left - basis, einde: r.right - basis };
+    });
+  }
+
+  function naar(x) {
+    var max = track.scrollWidth - track.clientWidth;
+    track.scrollTo({ left: Math.max(0, Math.min(max, x)), behavior: reduced ? "auto" : "smooth" });
+  }
+
+  function volgende() {
+    var rand = track.scrollLeft + track.clientWidth;
+    var p = plekken();
+    for (var i = 0; i < p.length; i++) {
+      if (p[i].einde > rand + 2) {
+        /* staat dit werk al vooraan (breder dan het scherm), schuif dan een scherm */
+        naar(p[i].begin > track.scrollLeft + 2 ? p[i].begin : track.scrollLeft + track.clientWidth);
+        return;
+      }
+    }
+    naar(track.scrollWidth);
+  }
+
+  function vorige() {
+    var doel = track.scrollLeft - track.clientWidth;
+    var p = plekken();
+    for (var i = 0; i < p.length; i++) {
+      if (p[i].begin >= doel - 2) { naar(p[i].begin < track.scrollLeft - 2 ? p[i].begin : doel); return; }
+    }
+    naar(0);
+  }
+
+  function pijlen() {
+    var max = track.scrollWidth - track.clientWidth;
+    if (tlVorige) tlVorige.disabled = track.scrollLeft <= 2;
+    if (tlVolgende) tlVolgende.disabled = track.scrollLeft >= max - 2;
+  }
+
+  if (tlVorige && tlVolgende) {
+    tlVorige.addEventListener("click", vorige);
+    tlVolgende.addEventListener("click", volgende);
+    track.addEventListener("scroll", pijlen, { passive: true });
+    window.addEventListener("resize", pijlen);
+    pijlen();
+  }
+
+  /* ---- Pijltjestoetsen: ook per reeks ---- */
   window.addEventListener("keydown", function (e) {
-    var step = track.clientWidth * 0.7;
-    if (e.key === "ArrowRight") track.scrollBy({ left: step, behavior: reduced ? "auto" : "smooth" });
-    if (e.key === "ArrowLeft") track.scrollBy({ left: -step, behavior: reduced ? "auto" : "smooth" });
+    if (kijker && !kijker.hidden) return;
+    if (e.key === "ArrowRight") volgende();
+    if (e.key === "ArrowLeft") vorige();
   });
 
   show(items[0]);
@@ -196,9 +252,6 @@ document.addEventListener("dragstart", function (e) {
   if (!kijker) return;
 
   var kImg = document.getElementById("kijker-img");
-  var kBeeld = document.getElementById("kijker-beeld");
-  var kGluur = document.getElementById("kijker-gluur");
-  kBeeld.addEventListener("animationend", function () { kBeeld.classList.remove("is-duw"); });
   var kTitel = document.getElementById("kijker-titel");
   var kJaar = document.getElementById("kijker-jaar");
   var kDetail = document.getElementById("kijker-detail");
@@ -207,16 +260,13 @@ document.addEventListener("dragstart", function (e) {
   var kVolgende = document.getElementById("kijker-volgende");
 
   var reeks = [];
-  var alGeduwd = false;
   var index = 0;
   var opener = null;
 
   function toon(i) {
     if (i < 0 || i >= reeks.length) return;
-    kBeeld.classList.remove("is-duw");
     index = i;
     kImg.src = reeks[i];
-    if (reeks[i + 1]) kGluur.src = reeks[i + 1]; else kGluur.removeAttribute("src");
     /* bij een werk met maar een foto zijn pijltjes zinloos */
     kVorige.hidden = kVolgende.hidden = reeks.length < 2;
     kTeller.textContent = reeks.length > 1 ? (i + 1) + " / " + reeks.length : "";
@@ -239,21 +289,12 @@ document.addEventListener("dragstart", function (e) {
     document.body.classList.add("is-kijker-open");
     toon(0);
     document.getElementById("kijker-sluit").focus();
-
-    /* De eerste keer dat je een werk met meerdere foto's opent: de foto
-       schuift even opzij en de volgende piept binnen, zodat je ziet dat je
-       kan vegen. Alleen op smalle schermen; breed zijn er de pijltjes. */
-    if (reeks.length > 1 && !alGeduwd && window.matchMedia("(max-width: 640px)").matches) {
-      alGeduwd = true;
-      setTimeout(function () { duw(kBeeld); }, 450);
-    }
   }
 
   function sluit() {
     kijker.hidden = true;
     document.body.classList.remove("is-kijker-open");
     kImg.removeAttribute("src");
-    kGluur.removeAttribute("src");
     if (opener) opener.focus();
   }
 

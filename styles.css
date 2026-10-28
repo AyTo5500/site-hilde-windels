@@ -149,6 +149,14 @@ img { display: block; }
 .focus__live.is-fading { opacity: 0; }
 .focus__sizer { visibility: hidden; pointer-events: none; }
 
+/* Bladeren door de tijdsbalk, per scherm vol werken. Links uitgelijnd
+   met de tekst: de pijl zelf staat in het midden van een grotere knop. */
+.bladeren {
+  display: flex;
+  gap: 0.5rem;
+  margin: clamp(0.75rem, 2svh, 1.25rem) 0 0 -0.95rem;
+}
+
 /* De gegevens van een werk, elk op een eigen regel: eerst wat het is,
    dan de maten, en de fotograaf kleiner en wat los eronder. */
 .d { display: block; }
@@ -209,14 +217,13 @@ img { display: block; }
 .tl__item:hover .tl__frame img { opacity: 0.82; }
 
 /* Eenmalig duwtje: de balk schuift even op en veert terug, zodat je ziet
-   dat er meer is. Hetzelfde voor de foto in de kijker bij meerdere foto's. */
+   dat er meer is. */
 @keyframes duw {
   0%   { transform: translateX(0); }
   45%  { transform: translateX(calc(-1 * var(--duw, 64px))); }
   100% { transform: translateX(0); }
 }
 .is-duw { animation: duw 1.3s cubic-bezier(0.45, 0, 0.25, 1) both; }
-.kijker__beeld.is-duw { --duw: 64px; }
 @media (max-width: 700px) {
   .tl__list.is-duw { --duw: 96px; }   /* het eerste werk vult bijna het scherm */
 }
@@ -360,13 +367,16 @@ img { display: block; }
     height: auto;
     grid-template-columns: 1fr;
     align-items: start;
-    gap: clamp(1rem, 2.5svh, 1.75rem);
+    gap: clamp(0.75rem, 1.5svh, 1.25rem);
     padding-bottom: clamp(2.5rem, 7svh, 4rem);
   }
   .stage__side { padding: 0 var(--pad); }
   .focus { margin-top: 1.5rem; min-height: 0; max-width: none; }
   .tl__list { padding-left: var(--pad); }
-  .timeline { --tl-h: clamp(180px, 40svh, 480px); }
+  /* iets lager dan voorheen, zodat met de pijltjes erbij de titel onder
+     het eerste werk nog in beeld blijft */
+  .timeline { --tl-h: clamp(180px, 36svh, 480px); }
+  .bladeren { margin-top: 0.25rem; }
 }
 
 /* Lage vensters: gestapeld en scrollbaar, anders valt de balk buiten beeld */
@@ -498,25 +508,6 @@ img { display: block; }
   align-items: center;
   gap: clamp(0.75rem, 2svh, 1.25rem);
 }
-/* De volgende foto staat rechts naast de huidige klaar, buiten beeld. Je
-   ziet hem alleen even als de foto opzij schuift om te tonen dat je kan vegen. */
-.kijker__beeld {
-  position: relative;
-  display: block;
-  max-width: 100%;
-}
-.kijker__fig .kijker__gluur {
-  position: absolute;
-  top: 0;
-  left: calc(100% + 0.75rem);
-  height: 100%;                 /* even hoog als de huidige foto */
-  width: auto;
-  max-width: none;
-  max-height: none;
-  visibility: hidden;
-}
-.kijker__beeld.is-duw .kijker__gluur { visibility: visible; }
-
 .kijker__fig img {
   max-width: 100%;
   max-height: 66svh;
@@ -550,8 +541,7 @@ img { display: block; }
 .kijker__teller:empty { display: none; }
 
 /* Knoppen: haarlijnen, in dezelfde taal als de rest */
-.kijker__sluit,
-.kijker__pijl {
+.kijker__sluit {
   position: relative;
   border: 0;
   background: none;
@@ -576,8 +566,17 @@ img { display: block; }
 .kijker__sluit::before { transform: rotate(45deg); }
 .kijker__sluit::after  { transform: rotate(-45deg); }
 
-.kijker__pijl { width: 2.75rem; height: 2.75rem; }
-.kijker__pijl::before {
+/* Pijltjes, in de kijker en onder de tijdsbalk */
+.pijl {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.pijl::before {
   content: "";
   position: absolute;
   top: 50%; left: 50%;
@@ -586,13 +585,13 @@ img { display: block; }
   border-bottom: 1px solid var(--ink);
   transition: transform .3s var(--ease);
 }
-.kijker__pijl--vorige::before   { transform: translate(-30%, -50%) rotate(45deg); }
-.kijker__pijl--volgende::before { transform: translate(-70%, -50%) rotate(-135deg); }
-.kijker__pijl--vorige:hover::before   { transform: translate(-55%, -50%) rotate(45deg); }
-.kijker__pijl--volgende:hover::before { transform: translate(-45%, -50%) rotate(-135deg); }
-.kijker__pijl[disabled] { opacity: 0.25; cursor: default; }
-.kijker__pijl[disabled]:hover::before { transform: translate(-30%, -50%) rotate(45deg); }
-.kijker__pijl--volgende[disabled]:hover::before { transform: translate(-70%, -50%) rotate(-135deg); }
+.pijl--vorige::before   { transform: translate(-30%, -50%) rotate(45deg); }
+.pijl--volgende::before { transform: translate(-70%, -50%) rotate(-135deg); }
+.pijl--vorige:hover::before   { transform: translate(-55%, -50%) rotate(45deg); }
+.pijl--volgende:hover::before { transform: translate(-45%, -50%) rotate(-135deg); }
+.pijl[disabled] { opacity: 0.25; cursor: default; }
+.pijl--vorige[disabled]:hover::before   { transform: translate(-30%, -50%) rotate(45deg); }
+.pijl--volgende[disabled]:hover::before { transform: translate(-70%, -50%) rotate(-135deg); }
 
 /* Geen scroll achter de kijker */
 .is-kijker-open { overflow: hidden; }
