@@ -122,7 +122,12 @@ img { display: block; }
 }
 
 /* Alles in deze kolom een maat groter dan het zetsel elders */
-.stage__side .display { font-size: clamp(3rem, 7.4vw, 7.6rem); }
+/* Ook begrensd door de hoogte: naam, beschrijving en pijltjes moeten samen
+   naast de tijdsbalk passen (foto + bijschrift), anders steekt de naam
+   boven de foto's uit. 16.5rem is de ruimte voor alles onder de naam. */
+.stage__side .display {
+  font-size: clamp(3rem, min(7.4vw, calc((var(--tl-h) + 6.6rem - 16.5rem) / 1.87)), 7.6rem);
+}
 .stage__side .display__sub { font-size: 1.05rem; }
 .stage__side .focus { font-size: 1.05rem; line-height: 1.55; }
 
