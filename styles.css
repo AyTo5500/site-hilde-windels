@@ -104,6 +104,9 @@ img { display: block; }
   letter-spacing: 0.06em;
 }
 .taal__nu { color: var(--ink); }
+.taal a { color: var(--ink-soft); transition: color .3s var(--ease); }
+.taal a:hover { color: var(--ink); }
+.taal--balk { display: none; }          /* alleen bij het hamburgermenu, zie onder */
 
 /* =========================================================
    Groot woord: naam of paginatitel
@@ -383,16 +386,14 @@ img { display: block; }
   .bar__nav a::after { display: none; }
   .bar__nav a.is-current { color: var(--ink-soft); }
   /* in het gsm-menu onder de pagina's, klein gehouden */
-  .taal {
-    margin-top: 1rem;
+  /* De taalkeuze staat dan in de balk zelf, niet in het uitklapmenu */
+  .bar__nav .taal { display: none; }
+  .taal--balk {
+    display: flex;
+    margin-left: auto;
     padding-left: 0;
     border-left: 0;
-    font-size: 0.9rem;
-  }
-  .bar__nav .taal a {
-    font-size: inherit;
-    letter-spacing: inherit;
-    color: var(--ink-soft);
+    font-size: 0.85rem;
   }
 
   .is-menu-open { overflow: hidden; }
@@ -407,6 +408,8 @@ img { display: block; }
   .bar__role,
   .bar__home { display: none; }
   .bar { justify-content: flex-end; }
+  /* zonder naam links: de taalkeuze links, het menu rechts */
+  .taal--balk { margin-left: 0; margin-right: auto; }
 }
 
 @media (max-width: 1000px) {
