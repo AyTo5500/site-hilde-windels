@@ -148,21 +148,17 @@ img { display: block; }
 .focus__live { display: block; }
 .focus__live { transition: opacity .3s var(--ease); }
 .focus__live.is-fading { opacity: 0; }
-.focus__sizer {
-  visibility: hidden;
-  pointer-events: none;
-  /* plaats voor de pijltjes, die direct onder de zichtbare tekst staan */
-  padding-bottom: calc(2.75rem + 1.2rem);
-}
+.focus__sizer { visibility: hidden; pointer-events: none; }
 
-/* Bladeren door de tijdsbalk, per scherm vol werken. Direct onder de
-   beschrijving van het werk; de lege ruimte die het vak vrijhoudt voor de
-   langste beschrijving valt daaronder. Links uitgelijnd met de tekst: de
-   pijl staat midden in een grotere knop. */
+/* Bladeren door de tijdsbalk, per scherm vol werken. Onder het tekstvak,
+   dat altijd zo hoog is als de langste beschrijving: zo staan de pijltjes
+   bij elk werk op dezelfde plek. Op desktop sluit hun onderkant aan op de
+   tijdas. Links uitgelijnd met de tekst: de pijl staat midden in een
+   grotere knop. */
 .bladeren {
   display: flex;
   gap: 0.25rem;
-  margin: 1.2rem 0 0 -0.95rem;
+  margin: 1rem 0 0 -0.95rem;
 }
 
 /* De gegevens van een werk, elk op een eigen regel: eerst wat het is,
