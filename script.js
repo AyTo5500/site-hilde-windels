@@ -15,7 +15,9 @@
   function zet(open) {
     document.body.classList.toggle("is-menu-open", open);
     burger.setAttribute("aria-expanded", open ? "true" : "false");
-    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    var nl = document.documentElement.lang === "nl";
+    burger.setAttribute("aria-label", open ? (nl ? "Menu sluiten" : "Close menu")
+                                           : (nl ? "Menu openen" : "Open menu"));
   }
 
   burger.addEventListener("click", function () {

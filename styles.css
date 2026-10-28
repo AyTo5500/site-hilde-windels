@@ -72,7 +72,7 @@ img { display: block; }
 }
 .bar__role { color: var(--ink-soft); }
 
-.bar__nav { display: flex; gap: clamp(1.1rem, 3vw, 2.75rem); }
+.bar__nav { display: flex; align-items: baseline; gap: clamp(1.1rem, 3vw, 2.75rem); }
 .bar__nav a {
   position: relative;
   white-space: nowrap;
@@ -92,6 +92,18 @@ img { display: block; }
 .bar__nav a:hover::after { right: 0; }
 .bar__nav a.is-current { color: var(--ink); }
 .bar__nav a.is-current::after { right: 0; background: var(--line); }
+
+/* Taalkeuze: klein en rustig achteraan in het menu, de huidige taal donker */
+.taal {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding-left: clamp(1.1rem, 3vw, 2.75rem);
+  border-left: 1px solid var(--line);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+}
+.taal__nu { color: var(--ink); }
 
 /* =========================================================
    Groot woord: naam of paginatitel
@@ -370,6 +382,18 @@ img { display: block; }
   }
   .bar__nav a::after { display: none; }
   .bar__nav a.is-current { color: var(--ink-soft); }
+  /* in het gsm-menu onder de pagina's, klein gehouden */
+  .taal {
+    margin-top: 1rem;
+    padding-left: 0;
+    border-left: 0;
+    font-size: 0.9rem;
+  }
+  .bar__nav .taal a {
+    font-size: inherit;
+    letter-spacing: inherit;
+    color: var(--ink-soft);
+  }
 
   .is-menu-open { overflow: hidden; }
   .is-menu-open .bar__nav { opacity: 1; visibility: visible; }

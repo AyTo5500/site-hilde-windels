@@ -24,20 +24,29 @@ collections:
     view_filters: []
     fields:
       - { name: titel, label: Titel, widget: string }
+      - name: titel_nl
+        label: Titel in het Nederlands
+        widget: string
+        required: false
+        hint: 'Alleen invullen als de titel in het Nederlands anders is, bijvoorbeeld: Zonder titel. Anders leeg laten.'
       - { name: jaar, label: Jaartal, widget: number, value_type: int, min: 1980, max: 2100 }
       - name: materiaal
-        label: Materiaal
+        label: Materiaal (Engels)
         widget: text
-        hint: 'In het Engels, bijvoorbeeld: Flax strips, partly painted. Suspended from a metal rod'
+        hint: 'Bijvoorbeeld: Flax strips, partly painted. Suspended from a metal rod'
+      - name: materiaal_nl
+        label: Materiaal (Nederlands)
+        widget: text
+        hint: 'Bijvoorbeeld: Vlasstroken, deels beschilderd. Hangend aan metalen staaf'
       - name: afmetingen
         label: Afmetingen
         widget: string
-        hint: 'In het Engels: B wordt W (width). Bijvoorbeeld: H 152 · W 94 · D 5 cm'
+        hint: 'In het Engels, B wordt W (width). Bijvoorbeeld: H 152 · W 94 · D 5 cm. De Nederlandse versie maakt de site zelf.'
       - name: collectie
         label: Collectie
         widget: string
         required: false
-        hint: 'Alleen invullen als het werk in een collectie zit, in het Engels. Bijvoorbeeld: Collection Huis Perrekes, Oosterlo'
+        hint: 'Alleen invullen als het werk in een collectie zit, in het Engels. Bijvoorbeeld: Collection Huis Perrekes, Oosterlo. De Nederlandse versie maakt de site zelf.'
       - name: fotograaf
         label: Fotograaf
         widget: string

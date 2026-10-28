@@ -16,10 +16,10 @@
   status = 301
   force = true
 
-# De pagina Over heette vroeger over-mij.html; oude links blijven werken.
+# De pagina Over stond vroeger op /over-mij.html; oude links blijven werken.
 [[redirects]]
   from = "/over-mij.html"
-  to = "/about.html"
+  to = "/nl/over-mij.html"
   status = 301
 
 # ======================================================================

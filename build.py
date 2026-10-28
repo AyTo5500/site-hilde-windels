@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Bouwt index.html uit de bestanden in werken/ en templates/index.html.
+Bouwt de startpagina in twee talen uit de bestanden in werken/:
+index.html (Engels, uit templates/index.html) en nl/index.html
+(Nederlands, uit templates/index.nl.html).
 
 Draait op kale Python 3, zonder installatie van pakketten, zodat dit over
 jaren nog werkt. Netlify voert dit uit bij elke wijziging via het CMS.
@@ -25,6 +27,39 @@ def lokaal(pad):
     return os.path.join(HIER, pad.lstrip("/"))
 DIRECT_LADEN = 4          # eerste vier foto's meteen, de rest bij naderen
 BASIS = "https://hilde-windels.com/"
+
+# Vaste woorden op de startpagina, per taal
+TEKST = {
+    "en": {"foto": "Photo %s", "fotos": "%d photos", "een": "photo",
+           "bekijk": "View %s, %s, %s", "per_stuk": "(each)"},
+    "nl": {"foto": "Foto %s", "fotos": "%d foto's", "een": "foto",
+           "bekijk": "%s, %s, %s bekijken", "per_stuk": "(per stuk)"},
+}
+
+
+def maten_nl(tekst):
+    """Afmetingen en collectie worden in het Engels ingevuld; de
+    Nederlandse versie volgt daar vanzelf uit."""
+    for en, nl in [("Room ", "Kamer "), ("H variable", "H variabel"),
+                   ("variable width/depth", "variabele breedte/diepte"),
+                   ("Ø circle", "Ø cirkel"), ("(each)", "(per stuk)"),
+                   ("Collection ", "Collectie "), ("Ghent", "Gent"),
+                   ("Bruges", "Brugge"), ("Brussels", "Brussel")]:
+        tekst = tekst.replace(en, nl)
+    tekst = re.sub(r"\bW (?=\d)", "B ", tekst)          # width wordt breedte
+    return re.sub(r"(\d)\.(\d)", r"\1,\2", tekst)      # 4.5 wordt 4,5
+
+
+def in_taal(werk, taal):
+    """Titel, materiaal, maten en collectie van een werk in de gevraagde taal."""
+    if taal == "en":
+        return {k: werk.get(k, "") for k in ("titel", "materiaal", "afmetingen", "collectie")}
+    return {
+        "titel": werk.get("titel_nl") or werk["titel"],
+        "materiaal": werk.get("materiaal_nl") or werk.get("materiaal", ""),
+        "afmetingen": maten_nl(str(werk.get("afmetingen", ""))),
+        "collectie": maten_nl(str(werk.get("collectie", ""))),
+    }
 
 
 def jpeg_formaat(pad):
@@ -54,24 +89,26 @@ def jpeg_formaat(pad):
             f.seek(lengte - 2, 1)
 
 
-def regels(werk):
+def regels(werk, taal="en"):
     """De losse velden van een werk, elk opgeschoond, als (soort, tekst).
 
     Bestand tegen hoe mensen echt typen: regeleindes, dubbele spaties en een
     punt aan het eind van een veld. Zonder dit wordt "stuks." plus ". " samen
     "stuks..", en dat is precies wat er gebeurde.
     """
+    t = TEKST[taal]
+    w = in_taal(werk, taal)
     fotograaf = " ".join(str(werk.get("fotograaf", "")).split())
-    velden = [("materiaal", werk.get("materiaal", "")),
-              ("maten", werk.get("afmetingen", "")),
-              ("collectie", werk.get("collectie", "")),
-              ("foto", "Photo %s" % fotograaf if fotograaf else "")]
+    velden = [("materiaal", w["materiaal"]),
+              ("maten", w["afmetingen"]),
+              ("collectie", w["collectie"]),
+              ("foto", t["foto"] % fotograaf if fotograaf else "")]
     schoon = []
     for soort, deel in velden:
         tekst = " ".join(str(deel).split())      # regeleindes en dubbele spaties weg
         tekst = tekst.rstrip(". ")               # eindpunt weg, de opmaak scheidt zelf
-        # "(each)" nooit los op een nieuwe regel laten vallen
-        tekst = tekst.replace(" (each)", "\u00a0(each)")
+        # "(each)" of "(per stuk)" nooit los op een nieuwe regel laten vallen
+        tekst = tekst.replace(" " + t["per_stuk"], "\u00a0" + t["per_stuk"].replace(" ", "\u00a0"))
         if tekst:
             schoon.append((soort, tekst))
     return schoon
@@ -82,10 +119,10 @@ def beschrijving(werk):
     return ". ".join(tekst for _, tekst in regels(werk))
 
 
-def detail_html(werk):
+def detail_html(werk, taal="en"):
     """De velden als losse regels, elk met een eigen klasse voor de opmaak."""
     return "".join('<span class="d d--%s">%s</span>' % (soort, html.escape(tekst))
-                   for soort, tekst in regels(werk))
+                   for soort, tekst in regels(werk, taal))
 
 
 def attr(tekst):
@@ -95,7 +132,7 @@ def attr(tekst):
             .replace(">", "&gt;").replace('"', "&quot;"))
 
 
-def bouw_werk(werk, volgnummer):
+def bouw_werk(werk, volgnummer, taal="en"):
     fotos = [f for f in werk["fotos"] if f]
     if not fotos:
         raise ValueError("werk zonder foto: %s" % werk["titel"])
@@ -104,15 +141,17 @@ def bouw_werk(werk, volgnummer):
         if not os.path.exists(lokaal(f)):
             raise ValueError("foto ontbreekt: %s (bij %s)" % (f, werk["titel"]))
 
+    t = TEKST[taal]
+    titel = in_taal(werk, taal)["titel"]
     breedte, hoogte = jpeg_formaat(lokaal(fotos[0]))
-    detail = detail_html(werk)
-    alt = "%s, %s" % (werk["titel"], werk["jaar"])
-    aantal = "%d photos" % len(fotos) if len(fotos) > 1 else "photo"
+    detail = detail_html(werk, taal)
+    alt = "%s, %s" % (titel, werk["jaar"])
+    aantal = t["fotos"] % len(fotos) if len(fotos) > 1 else t["een"]
     lui = "" if volgnummer < DIRECT_LADEN else ' loading="lazy"'
 
     if len(fotos) > 1:
         regel = ('<span class="tl__regel"><span class="tl__year">%s</span>'
-                 '<span class="tl__meer">%d photos</span></span>' % (werk["jaar"], len(fotos)))
+                 '<span class="tl__meer">%s</span></span>' % (werk["jaar"], t["fotos"] % len(fotos)))
     else:
         regel = '<span class="tl__year">%s</span>' % werk["jaar"]
 
@@ -127,9 +166,9 @@ def bouw_werk(werk, volgnummer):
         '        </li>\n'
     ) % (
         attr("|".join(fotos)), attr(detail), breedte / hoogte,
-        attr("View %s, %s, %s" % (werk["titel"], werk["jaar"], aantal)),
+        attr(t["bekijk"] % (titel, werk["jaar"], aantal)),
         fotos[0], lui, breedte, hoogte, attr(alt),
-        html.escape(werk["titel"]), regel,
+        html.escape(titel), regel,
     )
 
 
@@ -167,13 +206,13 @@ def escape_xml(tekst):
             .replace(">", "&gt;").replace('"', "&quot;"))
 
 
-def gestructureerde_data(werken):
+def gestructureerde_data(werken, taal="en"):
     """JSON-LD: wie de kunstenaar is en welke werken op de pagina staan."""
     kunstenaar = {
         "@type": "Person",
         "@id": BASIS + "#hilde-windels",
         "name": "Hilde Windels",
-        "jobTitle": "Visual artist",
+        "jobTitle": "Visual artist" if taal == "en" else "Beeldend kunstenaar",
         "url": BASIS,
         "image": BASIS + "assets/preview.jpg",
         "birthPlace": {"@type": "Place", "name": "Tielt, Belgium"},
@@ -189,10 +228,10 @@ def gestructureerde_data(werken):
             "position": n,
             "item": {
                 "@type": "VisualArtwork",
-                "name": werk["titel"],
+                "name": in_taal(werk, taal)["titel"],
                 "dateCreated": str(werk["jaar"]),
                 "artform": "Textile art",
-                "artMedium": werk.get("materiaal", ""),
+                "artMedium": in_taal(werk, taal)["materiaal"],
                 "creator": {"@id": BASIS + "#hilde-windels"},
                 "image": BASIS + werk["fotos"][0].lstrip("/"),
             },
@@ -202,9 +241,11 @@ def gestructureerde_data(werken):
         "@context": "https://schema.org",
         "@graph": [
             kunstenaar,
-            {"@type": "WebSite", "url": BASIS, "name": "Hilde Windels",
-             "inLanguage": "en", "about": {"@id": BASIS + "#hilde-windels"}},
-            {"@type": "ItemList", "name": "Work by Hilde Windels, 1990 to present",
+            {"@type": "WebSite", "url": BASIS if taal == "en" else BASIS + "nl/",
+             "name": "Hilde Windels", "inLanguage": taal,
+             "about": {"@id": BASIS + "#hilde-windels"}},
+            {"@type": "ItemList", "name": "Work by Hilde Windels, 1990 to present"
+             if taal == "en" else "Werk van Hilde Windels, 1990 tot heden",
              "numberOfItems": len(werken), "itemListElement": items},
         ],
     }
@@ -230,27 +271,26 @@ def main():
     # zodat de volgorde niet afhangt van bestandsnamen.
     werken.sort(key=lambda w: (-int(w["jaar"]), int(w.get("volgorde") or 0)))
 
-    lijst = "".join(bouw_werk(w, i) for i, w in enumerate(werken))
-
-    with open(os.path.join(HIER, "templates", "index.html"), encoding="utf-8") as f:
-        sjabloon = f.read()
-
     jaren = [int(w["jaar"]) for w in werken]
-    pagina = (sjabloon
-              .replace("{{WERKEN}}", lijst.rstrip("\n"))
-              .replace("{{EERSTE_DETAIL}}", detail_html(werken[0]))
-              .replace("{{OUDSTE}}", str(min(jaren))))
-
-    pagina = pagina.replace("{{GESTRUCTUREERDE_DATA}}", gestructureerde_data(werken))
-
-    with open(os.path.join(HIER, "index.html"), "w", encoding="utf-8") as f:
-        f.write(pagina)
+    for taal, sjabloon_naam, uit in [("en", "index.html", "index.html"),
+                                     ("nl", "index.nl.html", os.path.join("nl", "index.html"))]:
+        lijst = "".join(bouw_werk(w, i, taal) for i, w in enumerate(werken))
+        with open(os.path.join(HIER, "templates", sjabloon_naam), encoding="utf-8") as f:
+            sjabloon = f.read()
+        pagina = (sjabloon
+                  .replace("{{WERKEN}}", lijst.rstrip("\n"))
+                  .replace("{{EERSTE_DETAIL}}", detail_html(werken[0], taal))
+                  .replace("{{OUDSTE}}", str(min(jaren)))
+                  .replace("{{GESTRUCTUREERDE_DATA}}", gestructureerde_data(werken, taal)))
+        with open(os.path.join(HIER, uit), "w", encoding="utf-8") as f:
+            f.write(pagina)
 
     with open(os.path.join(HIER, "sitemap.xml"), "w", encoding="utf-8") as f:
-        f.write(sitemap(werken, [("", "1.0"), ("about.html", "0.8"),
-                                 ("contact.html", "0.5")]))
+        f.write(sitemap(werken, [("", "1.0"), ("about.html", "0.8"), ("contact.html", "0.5"),
+                                 ("nl/", "0.9"), ("nl/over-mij.html", "0.7"),
+                                 ("nl/contact.html", "0.4")]))
 
-    print("index.html gebouwd: %d werken, %d foto's"
+    print("index.html en nl/index.html gebouwd: %d werken, %d foto's"
           % (len(werken), sum(len(w["fotos"]) for w in werken)))
 
 
