@@ -196,6 +196,9 @@ document.addEventListener("dragstart", function (e) {
   if (!kijker) return;
 
   var kImg = document.getElementById("kijker-img");
+  var kBeeld = document.getElementById("kijker-beeld");
+  var kGluur = document.getElementById("kijker-gluur");
+  kBeeld.addEventListener("animationend", function () { kBeeld.classList.remove("is-duw"); });
   var kTitel = document.getElementById("kijker-titel");
   var kJaar = document.getElementById("kijker-jaar");
   var kDetail = document.getElementById("kijker-detail");
@@ -210,9 +213,12 @@ document.addEventListener("dragstart", function (e) {
 
   function toon(i) {
     if (i < 0 || i >= reeks.length) return;
-    kImg.classList.remove("is-duw");
+    kBeeld.classList.remove("is-duw");
     index = i;
     kImg.src = reeks[i];
+    if (reeks[i + 1]) kGluur.src = reeks[i + 1]; else kGluur.removeAttribute("src");
+    /* bij een werk met maar een foto zijn pijltjes zinloos */
+    kVorige.hidden = kVolgende.hidden = reeks.length < 2;
     kTeller.textContent = reeks.length > 1 ? (i + 1) + " / " + reeks.length : "";
     kVorige.disabled = i === 0;
     kVolgende.disabled = i === reeks.length - 1;
@@ -235,10 +241,11 @@ document.addEventListener("dragstart", function (e) {
     document.getElementById("kijker-sluit").focus();
 
     /* De eerste keer dat je een werk met meerdere foto's opent: de foto
-       schuift even op, zodat je ziet dat je kan bladeren of vegen. */
-    if (reeks.length > 1 && !alGeduwd) {
+       schuift even opzij en de volgende piept binnen, zodat je ziet dat je
+       kan vegen. Alleen op smalle schermen; breed zijn er de pijltjes. */
+    if (reeks.length > 1 && !alGeduwd && window.matchMedia("(max-width: 640px)").matches) {
       alGeduwd = true;
-      setTimeout(function () { duw(kImg); }, 450);
+      setTimeout(function () { duw(kBeeld); }, 450);
     }
   }
 
@@ -246,6 +253,7 @@ document.addEventListener("dragstart", function (e) {
     kijker.hidden = true;
     document.body.classList.remove("is-kijker-open");
     kImg.removeAttribute("src");
+    kGluur.removeAttribute("src");
     if (opener) opener.focus();
   }
 
