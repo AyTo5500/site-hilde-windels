@@ -181,30 +181,33 @@ document.addEventListener("dragstart", function (e) {
     return parseFloat(getComputedStyle(list).paddingLeft) || 0;
   }
 
-  function volgende() {
-    var m = marge();
-    var start = track.scrollLeft + m;
-    var rand = track.scrollLeft + track.clientWidth;
-    var p = plekken();
+  /* Waar de volgende reeks begint, gezien vanaf positie x */
+  function verder(x, p, m) {
+    var max = track.scrollWidth - track.clientWidth;
+    var start = x + m, rand = x + track.clientWidth;
     for (var i = 0; i < p.length; i++) {
       /* het eerste werk na het voorste dat niet helemaal in beeld staat */
-      if (p[i].begin > start + 2 && p[i].einde > rand + 2) {
-        naar(p[i].begin - m);
-        return;
-      }
+      if (p[i].begin > start + 2 && p[i].einde > rand + 2) return Math.min(p[i].begin - m, max);
     }
-    naar(track.scrollWidth);
+    return max;
   }
 
+  function volgende() {
+    naar(verder(track.scrollLeft, plekken(), marge()));
+  }
+
+  /* Terug gaat langs precies dezelfde reeksen als vooruit: vanaf het begin
+     doortellen tot net voor waar je nu staat. */
   function vorige() {
-    var m = marge();
-    var doel = track.scrollLeft - track.clientWidth;
-    var p = plekken();
-    for (var i = 0; i < p.length; i++) {
-      var x = p[i].begin - m;
-      if (x >= doel - 2) { naar(x < track.scrollLeft - 2 ? x : doel); return; }
+    var p = plekken(), m = marge(), nu = track.scrollLeft;
+    var x = 0, vorig = 0;
+    while (x < nu - 2) {
+      vorig = x;
+      var y = verder(x, p, m);
+      if (y <= x) break;
+      x = y;
     }
-    naar(0);
+    naar(vorig);
   }
 
   function pijlen() {
