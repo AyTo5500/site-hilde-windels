@@ -149,12 +149,13 @@ img { display: block; }
 .focus__live.is-fading { opacity: 0; }
 .focus__sizer { visibility: hidden; pointer-events: none; }
 
-/* Bladeren door de tijdsbalk, per scherm vol werken. Links uitgelijnd
-   met de tekst: de pijl zelf staat in het midden van een grotere knop. */
+/* Bladeren door de tijdsbalk, per scherm vol werken. Vlak onder de zin
+   over scrollen, die nooit verandert, zodat de pijltjes niet verspringen.
+   Links uitgelijnd met de tekst: de pijl staat midden in een grotere knop. */
 .bladeren {
   display: flex;
-  gap: 0.5rem;
-  margin: clamp(0.75rem, 2svh, 1.25rem) 0 0 -0.95rem;
+  gap: 0.25rem;
+  margin: 0.2rem 0 0 -0.95rem;
 }
 
 /* De gegevens van een werk, elk op een eigen regel: eerst wat het is,
@@ -376,7 +377,6 @@ img { display: block; }
   /* iets lager dan voorheen, zodat met de pijltjes erbij de titel onder
      het eerste werk nog in beeld blijft */
   .timeline { --tl-h: clamp(180px, 36svh, 480px); }
-  .bladeren { margin-top: 0.25rem; }
 }
 
 /* Lage vensters: gestapeld en scrollbaar, anders valt de balk buiten beeld */
