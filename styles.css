@@ -128,7 +128,7 @@ img { display: block; }
 
 .stage__side {
   /* zelfde linkermarge als de kopbalk, zodat alles op een lijn staat */
-  padding: 0 clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 5svh, 4rem) var(--pad);
+  padding: 0 clamp(1.5rem, 3vw, 3rem) 0 var(--pad);
 }
 
 /* Details van het werk waar je staat; verandert bij hover en bij scrollen */
@@ -375,11 +375,11 @@ img { display: block; }
     height: auto;
     grid-template-columns: 1fr;
     align-items: start;
-    gap: clamp(0.75rem, 1.5svh, 1.25rem);
+    gap: 0.25rem;
     padding-bottom: clamp(2.5rem, 7svh, 4rem);
   }
   .stage__side { padding: 0 var(--pad); }
-  .focus { margin-top: 1.5rem; min-height: 0; max-width: none; }
+  .focus { margin-top: 1.1rem; min-height: 0; max-width: none; }
   .tl__list { padding-left: var(--pad); }
   /* iets lager dan voorheen, zodat met de pijltjes erbij de titel onder
      het eerste werk nog in beeld blijft */
