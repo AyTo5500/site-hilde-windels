@@ -144,18 +144,25 @@ img { display: block; }
   color: var(--ink-soft);
   min-height: 4.5rem;
 }
-.focus > span { grid-area: 1 / 1; }
+.focus > * { grid-area: 1 / 1; }
+.focus__live { display: block; }
 .focus__live { transition: opacity .3s var(--ease); }
 .focus__live.is-fading { opacity: 0; }
-.focus__sizer { visibility: hidden; pointer-events: none; }
+.focus__sizer {
+  visibility: hidden;
+  pointer-events: none;
+  /* plaats voor de pijltjes, die direct onder de zichtbare tekst staan */
+  padding-bottom: calc(2.75rem + 0.6rem);
+}
 
-/* Bladeren door de tijdsbalk, per scherm vol werken. Vlak onder de zin
-   over scrollen, die nooit verandert, zodat de pijltjes niet verspringen.
-   Links uitgelijnd met de tekst: de pijl staat midden in een grotere knop. */
+/* Bladeren door de tijdsbalk, per scherm vol werken. Direct onder de
+   beschrijving van het werk; de lege ruimte die het vak vrijhoudt voor de
+   langste beschrijving valt daaronder. Links uitgelijnd met de tekst: de
+   pijl staat midden in een grotere knop. */
 .bladeren {
   display: flex;
   gap: 0.25rem;
-  margin: 0.2rem 0 0 -0.95rem;
+  margin: 0.6rem 0 0 -0.95rem;
 }
 
 /* De gegevens van een werk, elk op een eigen regel: eerst wat het is,
