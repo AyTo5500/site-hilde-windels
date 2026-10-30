@@ -454,7 +454,11 @@ img { display: block; }
   align-items: start;
 }
 @media (max-width: 1000px) {
-  .sheet__grid { grid-template-columns: 1fr; }
+  .sheet__grid { grid-template-columns: 1fr; gap: 0; }
+  /* Gestapeld: wat meer lucht tussen de inleiding en de gegevens, en
+     daarna dezelfde afstand naar Opleiding als tussen de cv-blokken. */
+  .sheet__text .data { margin-top: 2.6rem; margin-bottom: 0; }
+  .sheet__data > .cv__head:first-child { margin-top: 3rem; }
 }
 
 /* Liggende telefoons: minder hoogte kwijt aan de naam */
