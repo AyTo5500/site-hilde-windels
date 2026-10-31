@@ -1,6 +1,5 @@
-# TIJDELIJK: de site is nog niet af.
-# Zet dit terug naar "Allow: /" zodra de inhoud klopt.
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin/
 
 Sitemap: https://hilde-windels.com/sitemap.xml
